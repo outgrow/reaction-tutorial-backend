@@ -1,0 +1,31 @@
+"Input needed when submitting contact form"
+input ContactFormInput {
+  "Customer's full name"
+  fullName: String
+
+  "Customer's e-mail address"
+  email: String
+
+  "Message subject"
+  subject: String
+
+  "Message body"
+  message: String
+
+  "An optional string identifying the mutation call, which will be returned in the response payload"
+  clientMutationId: String
+}
+
+"The response from the `submitContactForm` mutation"
+type SubmitContactFormPayload {
+  "Boolean indicating whether or not errors happened when submitting contact form"
+  hasError: Boolean
+
+  "An optional string identifying the mutation call, which will be returned in the response payload"
+  clientMutationId: String
+}
+
+extend type Mutation {
+  "Submit the contact form"
+  submitContactForm(input: ContactFormInput!): SubmitContactFormPayload
+}
