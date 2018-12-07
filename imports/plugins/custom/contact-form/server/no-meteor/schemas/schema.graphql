@@ -1,16 +1,16 @@
 "Input needed when submitting contact form"
 input ContactFormInput {
   "Customer's full name"
-  fullName: String
+  fullName: String!
 
   "Customer's e-mail address"
-  email: String
+  email: String!
 
   "Message subject"
   subject: String
 
   "Message body"
-  message: String
+  message: String!
 
   "An optional string identifying the mutation call, which will be returned in the response payload"
   clientMutationId: String
