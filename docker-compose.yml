@@ -29,12 +29,14 @@ services:
       HYDRA_TOKEN_URL: "http://hydra:4444/oauth2/token"
       HYDRA_OAUTH2_INTROSPECT_URL: "http://hydra:4445/oauth2/introspect"
       OAUTH2_CLIENT_DOMAINS: "http://localhost:4000"
+      METEOR_WATCH_POLLING_INTERVAL_MS: 10000
     networks:
       default:
       api:
       auth:
     ports:
       - "3000:3000"
+      - "9229:9229"
     volumes:
       - .:/opt/reaction/src
       - reaction_node_modules:/opt/reaction/src/node_modules # do not link node_modules in, and persist it between dc up runs
