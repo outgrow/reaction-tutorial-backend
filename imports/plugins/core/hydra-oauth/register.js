@@ -12,8 +12,8 @@ Reaction.registerPackage({
   autoEnable: true,
   registry: [{
     route: "/account/login",
-    name: "OAuth Login",
-    label: "oauth-login",
+    name: "account/login",
+    label: "OAuth Login",
     meta: {
       noAdminControls: true,
       oauthLoginFlow: true
@@ -21,6 +21,17 @@ Reaction.registerPackage({
     description: "Oauth Login Provider Page",
     workflow: "hydraOauthLogin",
     template: "hydraOauthLoginForm"
+  }, {
+    route: "/not-found",
+    name: "not-found",
+    label: "not-found",
+    meta: {
+      noAdminControls: true,
+      oauthLoginFlow: true
+    },
+    description: "Not Found Page",
+    workflow: "hydraOauthLogin",
+    template: "notFound"
   }],
   layout: [{
     layout: "hydraOauthLogin",

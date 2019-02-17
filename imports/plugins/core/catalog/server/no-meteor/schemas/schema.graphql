@@ -107,7 +107,6 @@ interface CatalogProductOrVariant {
   height: Float
   isLowQuantity: Boolean!
   isSoldOut: Boolean!
-  isTaxable: Boolean!
   length: Float
   lowInventoryWarningThreshold: Int
   metafields: [Metafield]
@@ -115,8 +114,6 @@ interface CatalogProductOrVariant {
   originCountry: String
   shop: Shop!
   sku: String
-  taxCode: String
-  taxDescription: String
   title: String
 
   # This should be required but we need to migrate existing data first
@@ -146,7 +143,26 @@ type CatalogProduct implements CatalogProductOrVariant & Node {
   "The height of the product, if it has physical dimensions"
   height: Float
 
-  "True if isSoldOut is true AND none of the variants have an inventoryPolicy set"
+  """
+  The quantity of this item currently available to sell.
+  This number is updated when an order is placed by the customer.
+  This number does not include reserved inventory (i.e. inventory that has been ordered, but not yet processed by the operator).
+  This number is calculated by summing all child variant inventory numbers.
+  This is most likely the quantity to display in the storefront UI.
+  """
+  inventoryAvailableToSell: Int
+
+  """
+  The quantity of this item currently in stock.
+  This number is updated when an order is processed by the operator.
+  This number includes all inventory, including reserved inventory (i.e. inventory that has been ordered, but not yet processed by the operator).
+  This number is calculated by summing all child variant inventory numbers.
+  This is most likely just used as a reference in the operator UI, and not displayed in the storefront UI.
+  Called `inventoryQuantity` in the Product Schema, and `inventoryInStock` in the Catalog schema.
+  """
+  inventoryInStock: Int
+
+  "True if isSoldOut is true AND none of the variants have an inventoryPolicy set AND available inventory is 0"
   isBackorder: Boolean!
 
   "True if this product has been deleted. Typically, deleted products are not returned in queries."
@@ -157,9 +173,6 @@ type CatalogProduct implements CatalogProductOrVariant & Node {
 
   "True if every product variant has inventoryManagement enabled and has 0 inventory"
   isSoldOut: Boolean!
-
-  "Is sales tax charged on this item?"
-  isTaxable: Boolean!
 
   "True if this product should be shown to shoppers. Typically, non-visible products are not returned in queries."
   isVisible: Boolean!
@@ -227,12 +240,6 @@ type CatalogProduct implements CatalogProductOrVariant & Node {
   "The list of tags that have been applied to this product"
   tags(after: ConnectionCursor, before: ConnectionCursor, first: ConnectionLimitInt, last: ConnectionLimitInt, sortOrder: SortOrder = asc, sortBy: TagSortByField = _id): TagConnection
 
-  "A value matching a `taxCode` value from the full list of TaxCodes"
-  taxCode: String
-
-  "A description to use for the tax line item on an invoice"
-  taxDescription: String
-
   "Product title"
   title: String
 
@@ -259,6 +266,9 @@ type CatalogProductVariant implements CatalogProductOrVariant & Node {
   "The product variant barcode value, if it has one"
   barcode: String
 
+  "Indicates when the seller has allowed the sale of product which is not in stock. True if inventoryManagement is true AND none of the variants have an inventoryPolicy set."
+  canBackorder: Boolean!
+
   "The date and time at which this CatalogProductVariant was created, which is when the related product was first published"
   createdAt: DateTime
 
@@ -268,20 +278,39 @@ type CatalogProductVariant implements CatalogProductOrVariant & Node {
   "The position of this variant among other variants at the same level of the product-variant-option hierarchy"
   index: Int!
 
+  """
+  The quantity of this item currently available to sell.
+  This number is updated when an order is placed by the customer.
+  This number does not include reserved inventory (i.e. inventory that has been ordered, but not yet processed by the operator).
+  If this is a variant, this number is created by summing all child option inventory numbers.
+  This is most likely the quantity to display in the storefront UI.
+  """
+  inventoryAvailableToSell: Int
+
+  """
+  The quantity of this item currently in stock.
+  This number is updated when an order is processed by the operator.
+  This number includes all inventory, including reserved inventory (i.e. inventory that has been ordered, but not yet processed by the operator).
+  If this is a variant, this number is created by summing all child option inventory numbers.
+  This is most likely just used as a reference in the operator UI, and not displayed in the storefront UI.
+  Called `inventoryQuantity` in the Product Schema, and `inventoryInStock` in the Catalog schema.
+  """
+  inventoryInStock: Int
+
   "True if inventory management is enabled for this variant"
   inventoryManagement: Boolean!
 
   "True if inventory policy is enabled for this variant"
   inventoryPolicy: Boolean!
 
+  "True if isSoldOut is true AND none of the variants have an inventoryPolicy set AND available inventory is 0"
+  isBackorder: Boolean!
+
   "True if inventoryManagement is enabled and this variant has an available quantity less than its lowInventoryWarningThreshold"
   isLowQuantity: Boolean!
 
   "True if inventoryManagement is enabled and this variant has 0 inventory"
   isSoldOut: Boolean!
-
-  "Is sales tax charged on this item?"
-  isTaxable: Boolean!
 
   "The length of the product, if it has physical dimensions"
   length: Float
@@ -321,12 +350,6 @@ type CatalogProductVariant implements CatalogProductOrVariant & Node {
 
   "A stock keeping unit (SKU) identifier for this product"
   sku: String
-
-  "A value matching a `taxCode` value from the full list of TaxCodes"
-  taxCode: String
-
-  "A description to use for the tax line item on an invoice"
-  taxDescription: String
 
   "Product title"
   title: String

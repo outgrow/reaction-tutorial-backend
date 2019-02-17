@@ -1,9 +1,10 @@
 import Logger from "@reactioncommerce/logger";
+import canBackorder from "./canBackorder";
 import getCatalogProductMedia from "./getCatalogProductMedia";
 import getPriceRange from "./getPriceRange";
-import isBackorder from "./isBackorder";
-import isLowQuantity from "./isLowQuantity";
-import isSoldOut from "./isSoldOut";
+import isBackorder from "/imports/plugins/core/inventory/server/no-meteor/utils/isBackorder";
+import isLowQuantity from "/imports/plugins/core/inventory/server/no-meteor/utils/isLowQuantity";
+import isSoldOut from "/imports/plugins/core/inventory/server/no-meteor/utils/isSoldOut";
 
 /**
  * @method
@@ -12,23 +13,27 @@ import isSoldOut from "./isSoldOut";
  * @param {Object} variantPriceInfo The result of calling getPriceRange for this price or all child prices
  * @param {String} shopCurrencyCode The shop currency code for the shop to which this product belongs
  * @param {Object} variantMedia Media for this specific variant
+ * @param {Object} variantInventory Inventory flags for this variant
  * @private
  * @returns {Object} The transformed variant
  */
-export function xformVariant(variant, variantPriceInfo, shopCurrencyCode, variantMedia) {
+export function xformVariant(variant, variantPriceInfo, shopCurrencyCode, variantMedia, variantInventory) {
   const primaryImage = variantMedia.find(({ toGrid }) => toGrid === 1) || null;
 
   return {
     _id: variant._id,
     barcode: variant.barcode,
+    canBackorder: variantInventory.canBackorder,
     createdAt: variant.createdAt || new Date(),
     height: variant.height,
     index: variant.index || 0,
+    inventoryAvailableToSell: variantInventory.inventoryAvailableToSell || 0,
+    inventoryInStock: variantInventory.inventoryInStock || 0,
     inventoryManagement: !!variant.inventoryManagement,
     inventoryPolicy: !!variant.inventoryPolicy,
-    isLowQuantity: !!variant.isLowQuantity,
-    isSoldOut: !!variant.isSoldOut,
-    isTaxable: !!variant.taxable,
+    isBackorder: variantInventory.isBackorder,
+    isLowQuantity: variantInventory.isLowQuantity,
+    isSoldOut: variantInventory.isSoldOut,
     length: variant.length,
     lowInventoryWarningThreshold: variant.lowInventoryWarningThreshold,
     media: variantMedia,
@@ -49,8 +54,6 @@ export function xformVariant(variant, variantPriceInfo, shopCurrencyCode, varian
     primaryImage,
     shopId: variant.shopId,
     sku: variant.sku,
-    taxCode: variant.taxCode,
-    taxDescription: variant.taxDescription,
     title: variant.title,
     updatedAt: variant.updatedAt || variant.createdAt || new Date(),
     // The _id prop could change whereas this should always point back to the source variant in Products collection
@@ -98,22 +101,47 @@ export async function xformProduct({ collections, product, shop, variants }) {
     .map((variant) => {
       const variantOptions = options.get(variant._id);
       let priceInfo;
+      let variantInventory;
       if (variantOptions) {
         const optionPrices = variantOptions.map((option) => option.price);
         priceInfo = getPriceRange(optionPrices, shopCurrencyInfo);
+        variantInventory = {
+          canBackorder: canBackorder(variantOptions),
+          inventoryAvailableToSell: variant.inventoryAvailableToSell || 0,
+          inventoryInStock: variant.inventoryQuantity || 0,
+          isBackorder: isBackorder(variantOptions),
+          isLowQuantity: isLowQuantity(variantOptions),
+          isSoldOut: isSoldOut(variantOptions)
+        };
       } else {
         priceInfo = getPriceRange([variant.price], shopCurrencyInfo);
+        variantInventory = {
+          canBackorder: canBackorder([variant]),
+          inventoryAvailableToSell: variant.inventoryAvailableToSell || 0,
+          inventoryInStock: variant.inventoryQuantity || 0,
+          isBackorder: isBackorder([variant]),
+          isLowQuantity: isLowQuantity([variant]),
+          isSoldOut: isSoldOut([variant])
+        };
       }
       prices.push(priceInfo.min, priceInfo.max);
 
       const variantMedia = catalogProductMedia.filter((media) => media.variantId === variant._id);
 
-      const newVariant = xformVariant(variant, priceInfo, shopCurrencyCode, variantMedia);
+      const newVariant = xformVariant(variant, priceInfo, shopCurrencyCode, variantMedia, variantInventory);
 
       if (variantOptions) {
         newVariant.options = variantOptions.map((option) => {
           const optionMedia = catalogProductMedia.filter((media) => media.variantId === option._id);
-          return xformVariant(option, getPriceRange([option.price], shopCurrencyInfo), shopCurrencyCode, optionMedia);
+          const optionInventory = {
+            canBackorder: canBackorder([option]),
+            inventoryAvailableToSell: option.inventoryAvailableToSell,
+            inventoryInStock: option.inventoryQuantity,
+            isBackorder: isBackorder([option]),
+            isLowQuantity: isLowQuantity([option]),
+            isSoldOut: isSoldOut([option])
+          };
+          return xformVariant(option, getPriceRange([option.price], shopCurrencyInfo), shopCurrencyCode, optionMedia, optionInventory);
         });
       }
       return newVariant;
@@ -128,11 +156,12 @@ export async function xformProduct({ collections, product, shop, variants }) {
     createdAt: product.createdAt || new Date(),
     description: product.description,
     height: product.height,
+    inventoryAvailableToSell: product.inventoryAvailableToSell || 0,
+    inventoryInStock: product.inventoryQuantity || 0,
     isBackorder: isBackorder(variants),
     isDeleted: !!product.isDeleted,
     isLowQuantity: isLowQuantity(variants),
     isSoldOut: isSoldOut(variants),
-    isTaxable: !!product.taxable,
     isVisible: !!product.isVisible,
     length: product.length,
     lowInventoryWarningThreshold: product.lowInventoryWarningThreshold,
@@ -167,8 +196,6 @@ export async function xformProduct({ collections, product, shop, variants }) {
     ],
     supportedFulfillmentTypes: product.supportedFulfillmentTypes,
     tagIds: product.hashtags,
-    taxCode: product.taxCode,
-    taxDescription: product.taxDescription,
     title: product.title,
     type: "product-simple",
     updatedAt: product.updatedAt || product.createdAt || new Date(),

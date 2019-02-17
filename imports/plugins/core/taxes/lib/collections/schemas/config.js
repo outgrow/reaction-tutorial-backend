@@ -1,6 +1,5 @@
 import { registerSchema } from "@reactioncommerce/schemas";
 import { PackageConfig } from "/lib/collections/schemas";
-import { Taxes } from "./taxes";
 
 /**
  * @name TaxPackageConfig
@@ -15,34 +14,17 @@ export const TaxPackageConfig = PackageConfig.clone().extend({
     blackbox: false,
     defaultValue: {}
   },
-  "settings.defaultTaxCode": {
+  "settings.primaryTaxServiceName": {
     type: String,
     optional: true
   },
-  "settings.taxIncluded": {
-    type: Boolean,
-    defaultValue: false
-  },
-  "settings.taxShipping": {
-    type: Boolean,
-    defaultValue: false
-  },
-  "settings.rates": {
-    type: Object,
-    optional: true,
-    defaultValue: {}
-  },
-  "settings.rates.enabled": {
-    type: Boolean,
-    optional: true,
-    defaultValue: false
-  },
-  "settings.rates.taxes": {
-    type: Array,
+  "settings.fallbackTaxServiceName": {
+    type: String,
     optional: true
   },
-  "settings.rates.taxes.$": {
-    type: Taxes
+  "settings.defaultTaxCode": {
+    type: String,
+    optional: true
   }
 });
 

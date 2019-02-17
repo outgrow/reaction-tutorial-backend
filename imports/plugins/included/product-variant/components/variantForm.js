@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import _ from "lodash";
@@ -19,25 +19,10 @@ const fieldNames = [
   "taxCode",
   "taxDescription",
   "inventoryQuantity",
+  "inventoryAvailableToSell",
   "inventoryPolicy",
   "lowInventoryWarningThreshold"
 ];
-
-const fieldGroups = {
-  title: { group: "variantDetails" },
-  originCountry: { group: "variantDetails" },
-  compareAtPrice: { group: "variantDetails" },
-  price: { group: "variantDetails" },
-  width: { group: "variantDetails" },
-  length: { group: "variantDetails" },
-  height: { group: "variantDetails" },
-  weight: { group: "variantDetails" },
-  taxCode: { group: "taxable" },
-  taxDescription: { group: "taxable" },
-  inventoryQuantity: { group: "inventoryManagement" },
-  inventoryPolicy: { group: "inventoryManagement" },
-  lowInventoryWarningThreshold: { group: "inventoryManagement" }
-};
 
 class VariantForm extends Component {
   constructor(props) {
@@ -47,7 +32,7 @@ class VariantForm extends Component {
       expandedCard: props.editFocus,
       variant: props.variant,
       inventoryPolicy: props.variant.inventoryPolicy,
-      taxable: props.variant.taxable,
+      isTaxable: props.variant.isTaxable,
       inventoryManagement: props.variant.inventoryManagement
     };
   }
@@ -69,7 +54,7 @@ class VariantForm extends Component {
         expandedCard: nextProps.editFocus,
         inventoryManagement: nextProps.variant.inventoryManagement,
         inventoryPolicy: nextProps.variant.inventoryPolicy,
-        taxable: nextProps.variant.taxable,
+        isTaxable: nextProps.variant.isTaxable,
         variant: nextProps.variant
       });
     }
@@ -77,29 +62,6 @@ class VariantForm extends Component {
     this.setState({
       expandedCard: nextProps.editFocus
     });
-  }
-
-  fieldGroupForFieldName(field) {
-    // Other wise, if a field was passed
-    // const fieldName = this.state.viewProps.field;
-
-    let fieldName;
-
-    // If the field is an array of field name
-    if (Array.isArray(field) && field.length) {
-      // Use the first field name
-      [fieldName] = field;
-    } else {
-      fieldName = field;
-    }
-
-    const fieldData = fieldGroups[fieldName];
-
-    if (fieldData && fieldData.group) {
-      return fieldData.group;
-    }
-
-    return fieldName;
   }
 
   animateFieldFlash(fieldName) {
@@ -149,9 +111,11 @@ class VariantForm extends Component {
         ...variant,
         [field]: value
       }
-    }));
-
-    this.handleFieldBlur(event, value, field);
+    }), () => {
+      if (this.props.onVariantFieldSave) {
+        this.props.onVariantFieldSave(this.variant._id, field, value, this.state.variant);
+      }
+    });
   }
 
   handleInventoryPolicyChange = (event, value, field) => {
@@ -188,7 +152,11 @@ class VariantForm extends Component {
   isExpanded = (groupName) => this.state.expandedCard === groupName
 
   renderTaxCodeField() {
-    if (this.props.isProviderEnabled()) {
+    const { taxCodes, validation } = this.props;
+
+    if (Array.isArray(taxCodes) && taxCodes.length) {
+      const options = taxCodes.map(({ code, label }) => ({ label, value: code }));
+      options.unshift({ label: "None", value: "" });
       return (
         <Components.Select
           clearable={false}
@@ -197,7 +165,7 @@ class VariantForm extends Component {
           label="Tax Code"
           name="taxCode"
           ref="taxCodeInput"
-          options={this.props.fetchTaxCodes()}
+          options={options}
           onChange={this.handleSelectChange}
           value={this.variant.taxCode}
         />
@@ -206,8 +174,6 @@ class VariantForm extends Component {
     return (
       <Components.TextField
         i18nKeyLabel="productVariant.taxCode"
-        i18nKeyPlaceholder="productVariant.selectTaxCode"
-        placeholder="Select Tax Code"
         label="Tax Code"
         name="taxCode"
         ref="taxCodeInput"
@@ -215,7 +181,7 @@ class VariantForm extends Component {
         onBlur={this.handleFieldBlur}
         onChange={this.handleFieldChange}
         onReturnKeyDown={this.handleFieldBlur}
-        validation={this.props.validation}
+        validation={validation}
       />
     );
   }
@@ -263,14 +229,14 @@ class VariantForm extends Component {
             i18nKeyLabel="productVariant.inventoryPolicy"
             i18nKeyOnLabel="productVariant.inventoryPolicy"
             name="inventoryPolicy"
-            label={"Allow backorder"}
-            onLabel={"Allow backorder"}
+            label="Allow backorder"
+            onLabel="Allow backorder"
             checked={!this.state.inventoryPolicy}
             onChange={this.handleInventoryPolicyChange}
             validation={this.props.validation}
             disabled={true}
-            helpText={"Backorder allowance is now controlled by options"}
-            i18nKeyHelpText={"admin.helpText.variantBackorderToggle"}
+            helpText="Backorder allowance is now controlled by options"
+            i18nKeyHelpText="admin.helpText.variantBackorderToggle"
             style={{ backgroundColor: "lightgrey", cursor: "not-allowed" }}
           />
         </div>
@@ -283,8 +249,8 @@ class VariantForm extends Component {
           i18nKeyLabel="productVariant.inventoryPolicy"
           i18nKeyOnLabel="productVariant.inventoryPolicy"
           name="inventoryPolicy"
-          label={"Allow backorder"}
-          onLabel={"Allow backorder"}
+          label="Allow backorder"
+          onLabel="Allow backorder"
           checked={!this.state.inventoryPolicy}
           onChange={this.handleInventoryPolicyChange}
           validation={this.props.validation}
@@ -296,44 +262,84 @@ class VariantForm extends Component {
   renderQuantityField() {
     if (this.props.hasChildVariants(this.variant)) {
       return (
+        <Fragment>
+          <div className="col-sm-6">
+            <Components.TextField
+              i18nKeyLabel="productVariant.inventoryQuantity"
+              i18nKeyPlaceholder="0"
+              placeholder="0"
+              label="In Stock"
+              type="number"
+              name="inventoryQuantity"
+              ref="inventoryQuantityInput"
+              value={this.variant.inventoryQuantity}
+              style={{ backgroundColor: "lightgrey", cursor: "not-allowed" }}
+              disabled={true}
+              helpText="Variants inventory in stock quantity is calculated by options inventory"
+              i18nKeyHelpText="admin.helpText.variantInventoryQuantity"
+            />
+          </div>
+          <div className="col-sm-6">
+            <Components.TextField
+              i18nKeyLabel="productVariant.inventoryAvailableToSell"
+              i18nKeyPlaceholder="0"
+              placeholder="0"
+              label="Available To Sell"
+              type="number"
+              name="inventoryAvailableToSell"
+              ref="inventoryAvailableToSellInput"
+              value={this.variant.inventoryAvailableToSell}
+              style={{ backgroundColor: "lightgrey", cursor: "not-allowed" }}
+              disabled={true}
+              helpText="Variant inventory available to sell quantity is calculated by options inventory"
+              i18nKeyHelpText="admin.helpText.variantInventoryAvailableToSell"
+            />
+          </div>
+        </Fragment>
+      );
+    }
+
+    return (
+      <Fragment>
         <div className="col-sm-6">
           <Components.TextField
             i18nKeyLabel="productVariant.inventoryQuantity"
             i18nKeyPlaceholder="0"
             placeholder="0"
-            label="Quantity"
+            label="In Stock"
             type="number"
             name="inventoryQuantity"
             ref="inventoryQuantityInput"
-            value={this.props.onUpdateQuantityField(this.variant)}
-            style={{ backgroundColor: "lightgrey", cursor: "not-allowed" }}
-            disabled={true}
-            helpText={"Variant inventory is now controlled by options"}
-            i18nKeyHelpText={"admin.helpText.variantInventoryQuantity"}
+            value={this.variant.inventoryQuantity}
+            onChange={this.handleFieldChange}
+            onBlur={this.handleFieldBlur}
+            onReturnKeyDown={this.handleFieldBlur}
+            validation={this.props.validation}
+            helpText="Inventory in stock"
+            i18nKeyHelpText="admin.helpText.optionInventoryQuantity"
           />
         </div>
-      );
-    }
-
-    return (
-      <div className="col-sm-6">
-        <Components.TextField
-          i18nKeyLabel="productVariant.inventoryQuantity"
-          i18nKeyPlaceholder="0"
-          placeholder="0"
-          label="Quantity"
-          type="number"
-          name="inventoryQuantity"
-          ref="inventoryQuantityInput"
-          value={this.variant.inventoryQuantity}
-          onChange={this.handleFieldChange}
-          onBlur={this.handleFieldBlur}
-          onReturnKeyDown={this.handleFieldBlur}
-          validation={this.props.validation}
-          helpText={"Option inventory"}
-          i18nKeyHelpText={"admin.helpText.optionInventoryQuantity"}
-        />
-      </div>
+        <div className="col-sm-6">
+          <Components.TextField
+            i18nKeyLabel="productVariant.inventoryAvailableToSell"
+            i18nKeyPlaceholder="0"
+            placeholder="0"
+            label="Available To Sell"
+            type="number"
+            name="InventoryAvailableToSell"
+            ref="InventoryAvailableToSellInput"
+            value={this.variant.inventoryAvailableToSell}
+            style={{ backgroundColor: "lightgrey", cursor: "not-allowed" }}
+            disabled={true}
+            onChange={this.handleFieldChange}
+            onBlur={this.handleFieldBlur}
+            onReturnKeyDown={this.handleFieldBlur}
+            validation={this.props.validation}
+            helpText="Inventory available to sell"
+            i18nKeyHelpText="admin.helpText.optionInventoryAvailableToSell"
+          />
+        </div>
+      </Fragment>
     );
   }
 
@@ -510,10 +516,10 @@ class VariantForm extends Component {
         </Components.Card>
 
         <Components.SettingsCard
-          enabled={this.state.taxable}
+          enabled={this.state.isTaxable}
           expandable={true}
           i18nKeyTitle="productVariant.taxable"
-          name="taxable"
+          name="isTaxable"
           packageName={"reaction-product-variant"}
           saveOpenStateToPreferences={true}
           showSwitch={true}
@@ -783,18 +789,19 @@ VariantForm.propTypes = {
   cloneVariant: PropTypes.func,
   countries: PropTypes.arrayOf(PropTypes.object),
   editFocus: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-  fetchTaxCodes: PropTypes.func,
   greyDisabledFields: PropTypes.func,
   hasChildVariants: PropTypes.func,
   isDeleted: PropTypes.bool,
-  isProviderEnabled: PropTypes.func,
   onCardExpand: PropTypes.func,
   onFieldChange: PropTypes.func,
-  onUpdateQuantityField: PropTypes.func,
   onVariantFieldSave: PropTypes.func,
   onVisibilityButtonClick: PropTypes.func,
   removeVariant: PropTypes.func,
   restoreVariant: PropTypes.func,
+  taxCodes: PropTypes.arrayOf(PropTypes.shape({
+    code: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
+  })),
   type: PropTypes.string,
   validation: PropTypes.object,
   variant: PropTypes.object
