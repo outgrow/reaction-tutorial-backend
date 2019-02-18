@@ -1,0 +1,4 @@
+extend type CatalogProductVariant {
+  "Retailers that offer the product for in-store pick-up"
+  retailers: [String]
+}

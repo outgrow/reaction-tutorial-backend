@@ -1,1 +1,1 @@
-import "./schemas";
+import "./no-meteor/schemas";
