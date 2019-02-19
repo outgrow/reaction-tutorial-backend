@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStore } from "@fortawesome/free-solid-svg-icons";
+import { faStoreAlt } from "@fortawesome/free-solid-svg-icons";
 import { registerOperatorRoute } from "/imports/client/ui";
 import { RetailerDashboard } from "./containers";
 

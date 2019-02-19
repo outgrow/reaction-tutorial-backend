@@ -1,0 +1,13 @@
+[{
+  "i18n": "en",
+  "ns": "retailers",
+  "translation": {
+    "retailers": {
+      "admin": {
+        "retailerDashboard": {
+          "retailers": "Retailers"
+        }
+      }
+    }
+  }
+}]

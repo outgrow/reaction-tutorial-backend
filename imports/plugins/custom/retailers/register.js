@@ -4,7 +4,7 @@ import publishProductToCatalog from "./server/no-meteor/publishProductToCatalog"
 
 Reaction.registerPackage({
   label: "Product Retailers",
-  name: "product-retailer-map",
+  name: "retailers",
   autoEnable: true,
   catalog: {
     customPublishedProductVariantFields: ["retailers"]
