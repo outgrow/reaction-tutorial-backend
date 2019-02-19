@@ -21,7 +21,7 @@ Reaction.registerPackage({
       label: "Retailers",
       description: "Manage retailers",
       route: "/dashboard/navigation",
-      icon: "fa fa-store",
+      icon: "fa fa-map-marker",
       container: "core",
       template: "RetailerDashboard",
       name: "retailer-dashboard",
