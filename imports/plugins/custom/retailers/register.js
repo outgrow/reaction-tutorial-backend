@@ -14,39 +14,5 @@ Reaction.registerPackage({
   },
   graphQL: {
     schemas
-  },
-  registry: [
-    {
-      provides: ["settings"],
-      label: "Retailers",
-      description: "Manage retailers",
-      route: "/dashboard/navigation",
-      icon: "fa fa-map-marker",
-      container: "core",
-      template: "RetailerDashboard",
-      name: "retailer-dashboard",
-      workflow: "retailerWorkflow",
-      priority: 2,
-      meta: {
-        actionView: {
-          dashboardSize: "lg"
-        }
-      }
-    }
-  ],
-  layout: [{
-    workflow: "retailerWorkflow",
-    layout: "coreLayout",
-    theme: "default",
-    enabled: true,
-    structure: {
-      template: "RetailerDashboard",
-      layoutHeader: "NavBar",
-      layoutFooter: "",
-      notFound: "notFound",
-      dashboardControls: "",
-      dashboardHeaderControls: "",
-      adminControlsFooter: "adminControlsFooter"
-    }
-  }]
+  }
 });
