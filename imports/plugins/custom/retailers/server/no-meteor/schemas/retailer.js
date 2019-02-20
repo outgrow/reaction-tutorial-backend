@@ -1,6 +1,7 @@
 import SimpleSchema from "simpl-schema";
+import { registerSchema } from "@reactioncommerce/schemas";
 
-export default new SimpleSchema({
+const Retailer = new SimpleSchema({
   name: {
     type: String
   },
@@ -15,3 +16,7 @@ export default new SimpleSchema({
     default: true
   }
 });
+
+registerSchema("Retailers", Retailer);
+
+export default Retailer;
