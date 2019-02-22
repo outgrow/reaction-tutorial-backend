@@ -1,4 +1,5 @@
 import "./productVariant";
-import graphQlSchema from "./productVariant.graphql";
+import productVariantSchema from "./productVariant.graphql";
+import retailerSchema from "./schema.graphql";
 
-export default [graphQlSchema];
+export default [productVariantSchema, retailerSchema];
