@@ -1,12 +1,19 @@
 "A retailer"
 type Retailer {
-  name: String!,
-  latitude: Float!,
-  longitude: Float!,
+  "Retailer's name"
+  name: String!
+
+  "Position latitude"
+  latitude: Float!
+
+  "Position longitude"
+  longitude: Float!
+
+  "Wheher the retailer is shown to customers"
   enabled: Boolean!
 }
 
 extend type Query {
   "Returns a list of all retailers"
-  retailers(after: ConnectionCursor, before: ConnectionCursor, first: ConnectionLimitInt, last: ConnectionLimitInt, sortOrder: SortOrder = asc, sortBy: GroupSortByField = createdAt): [Retailer]
+  retailers: [Retailer]!
 }
