@@ -1,4 +1,5 @@
 import Reaction from "/imports/plugins/core/core/server/Reaction";
+import startup from "./server/no-meteor/startup";
 import schemas from "./server/no-meteor/schemas";
 import queries from "./server/no-meteor/queries";
 import resolvers from "./server/no-meteor/resolvers";
@@ -12,7 +13,8 @@ Reaction.registerPackage({
     customPublishedProductVariantFields: ["retailers"]
   },
   functionsByType: {
-    publishProductToCatalog: [publishProductToCatalog]
+    publishProductToCatalog: [publishProductToCatalog],
+    startup: [startup]
   },
   graphQL: {
     resolvers,
