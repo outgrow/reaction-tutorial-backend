@@ -13,7 +13,7 @@ const Retailer = new SimpleSchema({
   },
   enabled: {
     type: Boolean,
-    default: true
+    defaultValue: true
   }
 });
 
