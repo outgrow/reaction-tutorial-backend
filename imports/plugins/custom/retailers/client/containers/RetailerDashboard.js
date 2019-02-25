@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Components, registerComponent } from "@reactioncommerce/reaction-components";
 import { withRetailers } from "../hocs";
+import { RetailerDashboard } from "../components";
 
-class RetailerDashboard extends Component {
+class RetailerDashboardContainer extends Component {
   static propTypes = {
     isLoading: PropTypes.bool,
     retailers: PropTypes.array
@@ -15,19 +16,11 @@ class RetailerDashboard extends Component {
     if (isLoading) {
       return <Components.Loading />;
     }
-    return (
-      <div>
-        <h1>Retailers</h1>
-        <ul>
-          {retailers.map((retailer) => (
-            <li key={retailer.name}>{retailer.name} - Pos: {retailer.latitude}, {retailer.longitude}</li>
-          ))}
-        </ul>
-      </div>
-    )
+
+    return <RetailerDashboard retailers={retailers} />;
   }
 }
 
-registerComponent("RetailerDashboard", RetailerDashboard, [withRetailers]);
+registerComponent("RetailerDashboard", RetailerDashboardContainer, [withRetailers]);
 
-export default withRetailers(RetailerDashboard);
+export default withRetailers(RetailerDashboardContainer);
