@@ -82,6 +82,8 @@ class RetailerDashboard extends Component {
     console.log(address);
   };
 
+  renderSuggestItem = (suggestion) => <p>{suggestion.label}</p>;
+
   render() {
     const { retailers } = this.props;
 
@@ -102,7 +104,7 @@ class RetailerDashboard extends Component {
         />
 
         <Card>
-          <CardHeader title={"Add retailers"} />
+          <CardHeader title="Add retailers" />
           <CardBody padded>
             <Form
               ref={(formRef) => { this.form = formRef; }}
@@ -118,12 +120,14 @@ class RetailerDashboard extends Component {
               <Geosuggest
                 googleMaps={googleMapsApi}
                 onSuggestSelect={this.handleAddressSelect}
+                renderSuggestItem={this.renderSuggestItem}
               />
 
               <Field name="isEnabled">
                 <Checkbox name="isEnabled" label="Enabled" />
                 <ErrorsBlock names={["isEnabled"]} />
               </Field>
+
               <Button onClick={() => { this.form.submit(); }}>Save</Button>
             </Form>
           </CardBody>

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStoreAlt } from "@fortawesome/free-solid-svg-icons";
 import { registerOperatorRoute } from "/imports/client/ui";
 import { RetailerDashboard } from "./containers";
+import "./styles";
 
 registerOperatorRoute({
   isNavigationLink: true,
