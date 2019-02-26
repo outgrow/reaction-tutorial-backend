@@ -17,3 +17,35 @@ extend type Query {
   "Returns a list of all retailers"
   retailers: [Retailer]!
 }
+
+"Input for the `addRetailer` mutation"
+input AddRetailerInput {
+  "An optional string identifying the mutation call, which will be returned in the response payload"
+  clientMutationId: String!
+
+  "Retailer's name"
+  name: String!
+
+  "Position latitude"
+  latitude: Float!
+
+  "Position longitude"
+  longitude: Float!
+
+  "Wheher the retailer is shown to customers"
+  enabled: Boolean!
+}
+
+"Output for the `addRetailer` mutation"
+type AddRetailerPayload {
+  "The same string you sent with the mutation params, for matching mutation calls with their responses"
+  clientMutationId: String!
+
+  "The updated list of retailers"
+  retailers: [Retailer]
+}
+
+extend type Mutation {
+  "Adds a new retailer"
+  addRetailer(input: AddRetailerInput): AddRetailerPayload!
+}
