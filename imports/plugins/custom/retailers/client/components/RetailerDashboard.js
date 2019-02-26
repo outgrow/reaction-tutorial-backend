@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Form } from "reacto-form";
 import Geosuggest from "react-geosuggest";
 import loadGoogleMapsApi from "load-google-maps-api";
+import { Marker } from "react-google-maps";
 import Button from "@reactioncommerce/components/Button/v1";
 import Checkbox from "@reactioncommerce/components/Checkbox/v1";
 import ErrorsBlock from "@reactioncommerce/components/ErrorsBlock/v1";
@@ -9,6 +10,7 @@ import Field from "@reactioncommerce/components/Field/v1";
 import TextInput from "@reactioncommerce/components/TextInput/v1";
 import { Card, CardHeader, CardBody, CardGroup, ListItem } from "/imports/plugins/core/ui/client/components";
 import { SortableTable } from "/imports/plugins/core/ui/client/components";
+import Map from "./Map";
 
 let googleMapsApi = {};
 
@@ -24,11 +26,12 @@ class RetailerDashboard extends Component {
     super();
 
     this.state = {
-      address: "",
+      selectedPosition: {},
       newRetailer: {}
     };
 
     this.form = {};
+    this.map = null;
   }
 
   handleFormSubmit = (values) => {
@@ -78,9 +81,13 @@ class RetailerDashboard extends Component {
     return errors;
   };
 
-  handleAddressSelect = (address) => {
-    console.log(address);
+  handlePositionSelect = (selectedPosition) => {
+    this.setState({ selectedPosition });
+
+    this.map.panTo(selectedPosition.location);
   };
+
+  flushSelectedPosition = () => this.setState({ selectedPosition: {} });
 
   renderSuggestItem = (suggestion) => <p>{suggestion.label}</p>;
 
@@ -117,11 +124,25 @@ class RetailerDashboard extends Component {
                 <ErrorsBlock names={["name"]} />
               </Field>
 
-              <Geosuggest
-                googleMaps={googleMapsApi}
-                onSuggestSelect={this.handleAddressSelect}
-                renderSuggestItem={this.renderSuggestItem}
-              />
+              <div className="row">
+                <div className="col-md-6">
+                  <Geosuggest
+                    googleMaps={googleMapsApi}
+                    onSuggestSelect={this.handlePositionSelect}
+                    onUpdateSuggests={this.flushSelectedPosition}
+                    renderSuggestItem={this.renderSuggestItem}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <Map
+                    containerElement={<div style={{ height: `400px` }} />}
+                    mapElement={<div style={{ height: `100%` }} />}
+                    onMapMounted={(ref) => { this.map = ref; }}
+                  >
+                    {this.state.selectedPosition.location && <Marker position={this.state.selectedPosition.location} />}
+                  </Map>
+                </div>
+              </div>
 
               <Field name="isEnabled">
                 <Checkbox name="isEnabled" label="Enabled" />
