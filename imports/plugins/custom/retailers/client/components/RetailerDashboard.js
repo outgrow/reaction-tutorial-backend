@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Form } from "reacto-form";
+import Geosuggest from "react-geosuggest";
+import loadGoogleMapsApi from "load-google-maps-api";
 import Button from "@reactioncommerce/components/Button/v1";
 import Checkbox from "@reactioncommerce/components/Checkbox/v1";
 import ErrorsBlock from "@reactioncommerce/components/ErrorsBlock/v1";
@@ -8,11 +10,21 @@ import TextInput from "@reactioncommerce/components/TextInput/v1";
 import { Card, CardHeader, CardBody, CardGroup, ListItem } from "/imports/plugins/core/ui/client/components";
 import { SortableTable } from "/imports/plugins/core/ui/client/components";
 
+let googleMapsApi = {};
+
+loadGoogleMapsApi({
+  key: "AIzaSyBg2JoG5-Nr0RmgdvE6M2u3-w-CbG_pnRw",
+  libraries: ["places"]
+}).then((googleMaps) => {
+  googleMapsApi = googleMaps;
+});
+
 class RetailerDashboard extends Component {
   constructor() {
     super();
 
     this.state = {
+      address: "",
       newRetailer: {}
     };
 
@@ -66,6 +78,10 @@ class RetailerDashboard extends Component {
     return errors;
   };
 
+  handleAddressSelect = (address) => {
+    console.log(address);
+  };
+
   render() {
     const { retailers } = this.props;
 
@@ -98,14 +114,12 @@ class RetailerDashboard extends Component {
                 <TextInput id="name-input" name="name" />
                 <ErrorsBlock names={["name"]} />
               </Field>
-              <Field name="latitude" label="Latitude" labelFor="latitude-input">
-                <TextInput id="latitude-input" name="latitude" />
-                <ErrorsBlock names={["latitude"]} />
-              </Field>
-              <Field name="longitude" label="Longitude" labelFor="longitude-input">
-                <TextInput id="longitude-input" name="longitude" />
-                <ErrorsBlock names={["longitude"]} />
-              </Field>
+
+              <Geosuggest
+                googleMaps={googleMapsApi}
+                onSuggestSelect={this.handleAddressSelect}
+              />
+
               <Field name="isEnabled">
                 <Checkbox name="isEnabled" label="Enabled" />
                 <ErrorsBlock names={["isEnabled"]} />
