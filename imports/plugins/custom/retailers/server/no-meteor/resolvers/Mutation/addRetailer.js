@@ -15,10 +15,10 @@ export default async function addRetailer(parentResult, { input }, context) {
   const { clientMutationId = null } = input;
   // TODO: decode incoming IDs here
 
-  Logger.info("addRetailer resolver called");
+  const retailers = await context.mutations.addRetailer(input, context);
 
   return {
-    retailers: [],
-    clientMutationId
-  };
+    clientMutationId,
+    retailers
+  }
 }
