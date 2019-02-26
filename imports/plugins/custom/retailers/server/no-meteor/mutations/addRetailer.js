@@ -8,7 +8,12 @@
 export default async function addRetailer(input, context) {
   const retailerCollection = context.collections.Retailers;
 
-  await retailerCollection.insert({ ...input });
+  await retailerCollection.insert({
+    name: input.name,
+    latitude: input.latitude,
+    longitude: input.longitude,
+    isEnabled: input.isEnabled
+  });
 
   return retailerCollection.find().toArray();
 }

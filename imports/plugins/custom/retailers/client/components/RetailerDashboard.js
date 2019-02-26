@@ -77,9 +77,9 @@ class RetailerDashboard extends Component {
             { accessor: "name", Header: "Name" },
             { accessor: "latitude", Header: "Latitude" },
             { accessor: "longitude", Header: "Longitude" },
-            { accessor: "enabled", Header: "Enabled" }
+            { accessor: "isEnabled", Header: "Enabled" }
           ]}
-          filteredFields={["name", "latitude", "longitude", "enabled"]}
+          filteredFields={["name", "latitude", "longitude", "isEnabled"]}
           filterType="none"
           showFilter
           isSortable
@@ -106,9 +106,9 @@ class RetailerDashboard extends Component {
                 <TextInput id="longitude-input" name="longitude" />
                 <ErrorsBlock names={["longitude"]} />
               </Field>
-              <Field name="enabled">
-                <Checkbox name="enabled" label="Enabled" />
-                <ErrorsBlock names={["enabled"]} />
+              <Field name="isEnabled">
+                <Checkbox name="isEnabled" label="Enabled" />
+                <ErrorsBlock names={["isEnabled"]} />
               </Field>
               <Button onClick={() => { this.form.submit(); }}>Save</Button>
             </Form>

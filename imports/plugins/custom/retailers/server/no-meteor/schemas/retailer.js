@@ -11,7 +11,7 @@ const Retailer = new SimpleSchema({
   longitude: {
     type: Number
   },
-  enabled: {
+  isEnabled: {
     type: Boolean,
     defaultValue: true
   }

@@ -11,16 +11,41 @@ class RetailerDashboardContainer extends Component {
     retailers: PropTypes.array
   };
 
-  handleAddRetailer = async (values) => {
+  constructor() {
+    super();
+
+    this.state = {
+      retailers: []
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { retailers } = this.props;
+
+    if (retailers !== undefined) {
+      this.setState({ retailers });
+    }
+  }
+
+  handleAddRetailer = async (input) => {
     const updatedRetailerList = await this.props.addRetailer({
-      input: values
+      variables: {
+        input: {
+          ...input,
+          latitude: parseFloat(input.latitude),
+          longitude: parseFloat(input.longitude)
+        }
+      }
     });
 
     console.log("updated retailer list", updatedRetailerList);
+
+    this.setState({ retailers: updatedRetailerList.data.addRetailer.retailers });
   };
 
   render() {
-    const { isLoading, retailers } = this.props;
+    const { isLoading } = this.props;
+    const { retailers } = this.state;
 
     if (isLoading) {
       return <Components.Loading />;

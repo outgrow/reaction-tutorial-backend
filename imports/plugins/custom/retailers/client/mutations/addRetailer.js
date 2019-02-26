@@ -7,7 +7,7 @@ export default gql`
         name
         latitude
         longitude
-        enabled
+        isEnabled
       }
     }
   }
