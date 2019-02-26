@@ -1,10 +1,10 @@
 import gql from "graphql-tag";
 
 export default gql`
-  query {
+  query retailers {
     retailers {
-      name,
-      latitude,
+      name
+      latitude
       longitude
     }
   }

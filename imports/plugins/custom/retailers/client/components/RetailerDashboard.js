@@ -20,7 +20,9 @@ class RetailerDashboard extends Component {
   }
 
   handleFormSubmit = (values) => {
-    console.log(values);
+    this.props.onAddRetailer(values);
+
+    this.setState({ newRetailer: {} });
   };
 
   handleFormValidate = async (fields) => {

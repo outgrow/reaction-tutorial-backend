@@ -10,7 +10,7 @@ type Retailer {
   longitude: Float!
 
   "Wheher the retailer is shown to customers"
-  enabled: Boolean!
+  enabled: Boolean
 }
 
 extend type Query {
@@ -33,7 +33,7 @@ input AddRetailerInput {
   longitude: Float!
 
   "Wheher the retailer is shown to customers"
-  enabled: Boolean!
+  enabled: Boolean
 }
 
 "Output for the `addRetailer` mutation"

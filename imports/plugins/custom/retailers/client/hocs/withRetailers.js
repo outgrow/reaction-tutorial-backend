@@ -3,12 +3,13 @@ import { Query, withApollo } from "react-apollo";
 import { retailers } from "../queries";
 
 const withRetailers = (Component) => {
-  const WithRetailers = () => (
+  const WithRetailers = (initialProps) => (
     <Query query={retailers}>
       {({ loading, data }) => {
         const props = {
           isLoading: loading,
-          ...data
+          ...data,
+          ...initialProps
         };
 
         return <Component {...props} />;

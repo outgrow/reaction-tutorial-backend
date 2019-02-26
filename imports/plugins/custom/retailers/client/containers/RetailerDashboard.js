@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Components, registerComponent } from "@reactioncommerce/reaction-components";
-import { withRetailers } from "../hocs";
+import { withAddRetailer, withRetailers } from "../hocs";
 import { RetailerDashboard } from "../components";
 
 class RetailerDashboardContainer extends Component {
   static propTypes = {
+    addRetailer: PropTypes.func,
     isLoading: PropTypes.bool,
     retailers: PropTypes.array
+  };
+
+  handleAddRetailer = async (values) => {
+    const updatedRetailerList = await this.props.addRetailer({
+      input: values
+    });
+
+    console.log("updated retailer list", updatedRetailerList);
   };
 
   render() {
@@ -17,10 +26,18 @@ class RetailerDashboardContainer extends Component {
       return <Components.Loading />;
     }
 
-    return <RetailerDashboard retailers={retailers} />;
+    return (
+      <RetailerDashboard
+        onAddRetailer={this.handleAddRetailer}
+        retailers={retailers}
+      />
+    );
   }
 }
 
-registerComponent("RetailerDashboard", RetailerDashboardContainer, [withRetailers]);
+registerComponent("RetailerDashboard", RetailerDashboardContainer, [
+  withAddRetailer,
+  withRetailers
+]);
 
-export default withRetailers(RetailerDashboardContainer);
+export default withAddRetailer(withRetailers(RetailerDashboardContainer));
