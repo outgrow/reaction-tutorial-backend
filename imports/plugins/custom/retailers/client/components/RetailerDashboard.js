@@ -26,6 +26,7 @@ class RetailerDashboard extends Component {
     super();
 
     this.state = {
+      isEditingRetailerId: "",
       selectedPosition: {},
       newRetailer: {}
     };
@@ -35,11 +36,26 @@ class RetailerDashboard extends Component {
   }
 
   handleFormSubmit = (values) => {
-    this.props.onAddRetailer({
+    const { isEditingRetailerId } = this.state;
+
+    const retailer = {
       ...values,
       latitude: this.state.selectedPosition.location.lat,
       longitude: this.state.selectedPosition.location.lng
-    });
+    };
+
+    if (retailer.__typename !== undefined) {
+      delete retailer.__typename;
+    }
+
+    if (typeof isEditingRetailerId === "string" && isEditingRetailerId.length > 0) {
+      this.props.onUpdateRetailer({
+        ...retailer,
+        retailerId: isEditingRetailerId
+      })
+    } else {
+      this.props.onAddRetailer(retailer);
+    }
 
     this.setState({ newRetailer: {} });
   };
@@ -72,6 +88,21 @@ class RetailerDashboard extends Component {
     }
   };
 
+  handleBeginUpdateRetailer = (retailer) => {
+    this.setState({
+      isEditingRetailerId: retailer.retailerId,
+      newRetailer: retailer,
+      selectedPosition: {
+        location: {
+          lat: retailer.latitude,
+          lng: retailer.longitude
+        }
+      }
+    });
+
+    this.map.panTo({ lat: retailer.latitude, lng: retailer.longitude });
+  };
+
   flushSelectedPosition = () => this.setState({ selectedPosition: {} });
 
   renderSuggestItem = (suggestion) => <p>{suggestion.label}</p>;
@@ -99,7 +130,7 @@ class RetailerDashboard extends Component {
               Header: "Actions",
               Cell: ({ original }) => (
                 <div>
-                  <Button actionType="important" isShortHeight isFullWidth>
+                  <Button actionType="important" onClick={() => this.handleBeginUpdateRetailer(original)}isShortHeight isFullWidth>
                     <i className="fa fa-pencil" />
                   </Button>
                   <Button actionType="danger" onClick={() => onDeleteRetailer(original.retailerId)}isShortHeight isFullWidth>

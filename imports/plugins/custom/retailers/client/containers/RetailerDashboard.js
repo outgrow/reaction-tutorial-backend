@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { compose } from "recompose";
 import { Components, registerComponent } from "@reactioncommerce/reaction-components";
-import { withAddRetailer, withDeleteRetailer, withRetailers } from "../hocs";
+import {
+  withAddRetailer,
+  withDeleteRetailer,
+  withRetailers,
+  withUpdateRetailer
+} from "../hocs";
 import { RetailerDashboard } from "../components";
 
 class RetailerDashboardContainer extends Component {
@@ -56,6 +61,22 @@ class RetailerDashboardContainer extends Component {
     this.setState({ retailers: updatedRetailerList.data.deleteRetailer.retailers });
   };
 
+  handleUpdateRetailer = async (input) => {
+    const updatedRetailerList = await this.props.updateRetailer({
+      variables: {
+        input: {
+          ...input,
+          latitude: parseFloat(input.latitude),
+          longitude: parseFloat(input.longitude)
+        }
+      }
+    });
+
+    console.log("updated retailer list", updatedRetailerList);
+
+    this.setState({ retailers: updatedRetailerList.data.updateRetailer.retailers });
+  };
+
   render() {
     const { isLoading } = this.props;
     const { retailers } = this.state;
@@ -68,6 +89,7 @@ class RetailerDashboardContainer extends Component {
       <RetailerDashboard
         onAddRetailer={this.handleAddRetailer}
         onDeleteRetailer={this.handleDeleteRetailer}
+        onUpdateRetailer={this.handleUpdateRetailer}
         retailers={retailers}
       />
     );
@@ -77,11 +99,13 @@ class RetailerDashboardContainer extends Component {
 registerComponent("RetailerDashboard", RetailerDashboardContainer, [
   withAddRetailer,
   withDeleteRetailer,
-  withRetailers
+  withRetailers,
+  withUpdateRetailer
 ]);
 
 export default compose(
   withAddRetailer,
   withDeleteRetailer,
-  withRetailers
+  withRetailers,
+  withUpdateRetailer
 )(RetailerDashboardContainer);
