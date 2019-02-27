@@ -4,7 +4,7 @@ import { withGoogleMap, GoogleMap } from "react-google-maps"
 const Map = ({ children, onMapMounted }) => (
   <GoogleMap
     defaultCenter={{ lat: 43.6966119, lng: 7.2873863 }}
-    defaultZoom={10}
+    defaultZoom={12}
     ref={onMapMounted}
   >
     {children}

@@ -84,7 +84,9 @@ class RetailerDashboard extends Component {
   handlePositionSelect = (selectedPosition) => {
     this.setState({ selectedPosition });
 
-    this.map.panTo(selectedPosition.location);
+    if (selectedPosition !== undefined) {
+      this.map.panTo(selectedPosition.location);
+    }
   };
 
   flushSelectedPosition = () => this.setState({ selectedPosition: {} });
