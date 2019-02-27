@@ -56,10 +56,33 @@ input DeleteRetailerInput {
   retailerId: String!
 }
 
+input UpdateRetailerInput {
+  "An optional string identifying the mutation call, which will be returned in the response payload"
+  clientMutationId: String
+
+  "Retailer ID"
+  retailerId: String!
+
+  "Retailer's name"
+  name: String!
+
+  "Position latitude"
+  latitude: Float!
+
+  "Position longitude"
+  longitude: Float!
+
+  "Wheher the retailer is shown to customers"
+  isEnabled: Boolean
+}
+
 extend type Mutation {
   "Adds a new retailer"
   addRetailer(input: AddRetailerInput): UpdateRetailersPayload!
 
   "Removes a retailer"
   deleteRetailer(input: DeleteRetailerInput): UpdateRetailersPayload!
+
+  "Updates a retailer"
+  updateRetailer(input: UpdateRetailerInput): UpdateRetailersPayload!
 }
