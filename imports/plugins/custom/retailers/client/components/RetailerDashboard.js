@@ -35,7 +35,11 @@ class RetailerDashboard extends Component {
   }
 
   handleFormSubmit = (values) => {
-    this.props.onAddRetailer(values);
+    this.props.onAddRetailer({
+      ...values,
+      latitude: this.state.selectedPosition.location.lat,
+      longitude: this.state.selectedPosition.location.lng
+    });
 
     this.setState({ newRetailer: {} });
   };
@@ -50,31 +54,10 @@ class RetailerDashboard extends Component {
       });
     }
 
-    if (!fields.latitude || fields.latitude.length <= 0) {
+    if (!this.state.selectedPosition || !this.state.selectedPosition.location) {
       errors.push({
-        message: "Latitude is required.",
-        name: "latitude"
-      });
-    }
-
-    if (!fields.longitude || fields.longitude.length <= 0) {
-      errors.push({
-        message: "Longitude is required.",
-        name: "longitude"
-      });
-    }
-
-    if (fields.latitude && fields.latitude.length > 0 && isNaN(parseFloat(fields.latitude))) {
-      errors.push({
-        message: "Latitude has to be a number.",
-        name: "latitude"
-      });
-    }
-
-    if (fields.longitude && fields.longitude.length > 0 && isNaN(parseFloat(fields.longitude))) {
-      errors.push({
-        message: "Longitude has to be a number.",
-        name: "longitude"
+        message: "Position is required.",
+        name: "position"
       });
     }
 
@@ -136,6 +119,8 @@ class RetailerDashboard extends Component {
                     onUpdateSuggests={this.flushSelectedPosition}
                     renderSuggestItem={this.renderSuggestItem}
                   />
+
+                  <ErrorsBlock names={["position"]} />
                 </div>
                 <div className="col-md-6">
                   <Map
@@ -143,7 +128,7 @@ class RetailerDashboard extends Component {
                     mapElement={<div style={{ height: `100%` }} />}
                     onMapMounted={(ref) => { this.map = ref; }}
                   >
-                    {this.state.selectedPosition.location && <Marker position={this.state.selectedPosition.location} />}
+                    {this.state.selectedPosition && <Marker position={this.state.selectedPosition.location} />}
                   </Map>
                 </div>
               </div>
