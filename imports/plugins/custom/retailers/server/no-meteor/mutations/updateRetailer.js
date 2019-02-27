@@ -14,10 +14,12 @@ export default async function updateRetailer(input, context) {
   await retailerCollection.updateOne({
     _id: ObjectID.createFromHexString(input.retailerId)
   }, {
-    name: input.name,
-    latitude: input.latitude,
-    longitude: input.longitude,
-    isEnabled: input.isEnabled
+    $set: {
+      name: input.name,
+      latitude: input.latitude,
+      longitude: input.longitude,
+      isEnabled: input.isEnabled
+    }
   });
 
   return getRetailers(context);
