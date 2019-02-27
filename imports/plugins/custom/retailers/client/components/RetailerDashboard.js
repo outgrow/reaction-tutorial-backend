@@ -128,7 +128,9 @@ class RetailerDashboard extends Component {
 
               <div className="row">
                 <div className="col-md-6">
+                  <label className="geosuggest__label">Find an address</label>
                   <Geosuggest
+                    placeholder=""
                     googleMaps={googleMapsApi}
                     onSuggestSelect={this.handlePositionSelect}
                     onUpdateSuggests={this.flushSelectedPosition}
