@@ -1,3 +1,5 @@
+import getRetailers from "../queries/retailers";
+
 /**
  * @method addRetailer
  * @summary Adds a new retailer to the `Retailers` collection
@@ -15,5 +17,5 @@ export default async function addRetailer(input, context) {
     isEnabled: input.isEnabled
   });
 
-  return retailerCollection.find().toArray();
+  return getRetailers(context);
 }

@@ -77,7 +77,7 @@ class RetailerDashboard extends Component {
   renderSuggestItem = (suggestion) => <p>{suggestion.label}</p>;
 
   render() {
-    const { retailers } = this.props;
+    const { onDeleteRetailer, retailers } = this.props;
 
     return (
       <div>
@@ -87,7 +87,27 @@ class RetailerDashboard extends Component {
             { accessor: "name", Header: "Name" },
             { accessor: "latitude", Header: "Latitude" },
             { accessor: "longitude", Header: "Longitude" },
-            { accessor: "isEnabled", Header: "Enabled" }
+            {
+              accessor: "isEnabled",
+              Header: "Enabled",
+              Cell: ({ original }) => (
+                <span>{original.isEnabled ? "Yes" : "No"}</span>
+              )
+            },
+            {
+              accessor: "retailerId",
+              Header: "Actions",
+              Cell: ({ original }) => (
+                <div>
+                  <Button actionType="important" isShortHeight isFullWidth>
+                    <i className="fa fa-pencil" />
+                  </Button>
+                  <Button actionType="danger" onClick={() => onDeleteRetailer(original.retailerId)}isShortHeight isFullWidth>
+                    <i className="fa fa-trash-o" />
+                  </Button>
+                </div>
+              )
+            }
           ]}
           filteredFields={["name", "latitude", "longitude", "isEnabled"]}
           filterType="none"

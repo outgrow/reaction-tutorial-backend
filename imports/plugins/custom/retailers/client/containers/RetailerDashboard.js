@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { compose } from "recompose";
 import { Components, registerComponent } from "@reactioncommerce/reaction-components";
-import { withAddRetailer, withRetailers } from "../hocs";
+import { withAddRetailer, withDeleteRetailer, withRetailers } from "../hocs";
 import { RetailerDashboard } from "../components";
 
 class RetailerDashboardContainer extends Component {
@@ -43,6 +44,18 @@ class RetailerDashboardContainer extends Component {
     this.setState({ retailers: updatedRetailerList.data.addRetailer.retailers });
   };
 
+  handleDeleteRetailer = async (retailerId) => {
+    const updatedRetailerList = await this.props.deleteRetailer({
+      variables: {
+        input: {
+          retailerId
+        }
+      }
+    });
+
+    this.setState({ retailers: updatedRetailerList.data.deleteRetailer.retailers });
+  };
+
   render() {
     const { isLoading } = this.props;
     const { retailers } = this.state;
@@ -54,6 +67,7 @@ class RetailerDashboardContainer extends Component {
     return (
       <RetailerDashboard
         onAddRetailer={this.handleAddRetailer}
+        onDeleteRetailer={this.handleDeleteRetailer}
         retailers={retailers}
       />
     );
@@ -62,7 +76,12 @@ class RetailerDashboardContainer extends Component {
 
 registerComponent("RetailerDashboard", RetailerDashboardContainer, [
   withAddRetailer,
+  withDeleteRetailer,
   withRetailers
 ]);
 
-export default withAddRetailer(withRetailers(RetailerDashboardContainer));
+export default compose(
+  withAddRetailer,
+  withDeleteRetailer,
+  withRetailers
+)(RetailerDashboardContainer);

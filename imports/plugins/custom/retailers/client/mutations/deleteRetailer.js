@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export default gql`
-  mutation addRetailer($input: AddRetailerInput!) {
-    addRetailer(input: $input) {
+  mutation deleteRetailer($input: DeleteRetailerInput!) {
+    deleteRetailer(input: $input) {
       retailers {
         name
         latitude

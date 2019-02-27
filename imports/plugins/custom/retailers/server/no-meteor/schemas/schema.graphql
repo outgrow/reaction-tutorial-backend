@@ -11,6 +11,9 @@ type Retailer {
 
   "Wheher the retailer is shown to customers"
   isEnabled: Boolean
+
+  "Retailer ID"
+  retailerId: String!
 }
 
 extend type Query {
@@ -36,8 +39,8 @@ input AddRetailerInput {
   isEnabled: Boolean
 }
 
-"Output for the `addRetailer` mutation"
-type AddRetailerPayload {
+"Output for any mutation altering the Retailer collection"
+type UpdateRetailersPayload {
   "The same string you sent with the mutation params, for matching mutation calls with their responses"
   clientMutationId: String
 
@@ -45,7 +48,18 @@ type AddRetailerPayload {
   retailers: [Retailer]
 }
 
+input DeleteRetailerInput {
+  "An optional string identifying the mutation call, which will be returned in the response payload"
+  clientMutationId: String
+
+  "Retailer ID"
+  retailerId: String!
+}
+
 extend type Mutation {
   "Adds a new retailer"
-  addRetailer(input: AddRetailerInput): AddRetailerPayload!
+  addRetailer(input: AddRetailerInput): UpdateRetailersPayload!
+
+  "Removes a retailer"
+  deleteRetailer(input: DeleteRetailerInput): UpdateRetailersPayload!
 }
