@@ -9,30 +9,23 @@ const VariantForm = getRawComponent("VariantForm");
 
 class CustomVariantForm extends VariantForm {
   handleToggleRetailer = (event, value, retailerId) => {
-    this.setState({
-      retailers: {
-        ...this.state.retailers,
-        [retailerId]: value
-      }
-    }, () => {
-      const { retailers, variant } = this.state;
-      const retailerIds = [];
+    const { variant } = this.state;
+    let retailerIds = variant.retailers;
 
-      for (let retailerId in retailers) {
-        if (retailers.hasOwnProperty(retailerId) && retailers[retailerId] === true) {
-          retailerIds.push(retailerId);
+    if (value === true && retailerIds.includes(retailerId) === false) {
+      retailerIds.push(retailerId);
+    } else if (value === false && retailerIds.includes(retailerId) === true) {
+      retailerIds = retailerIds.filter((id) => id !== retailerId);
+    }
+
+    this.props.updateRetailersForVariant({
+      variables: {
+        input: {
+          productId: ReactionProduct.selectedProductId(),
+          optionId: variant._id,
+          retailers: retailerIds
         }
       }
-
-      this.props.updateRetailersForVariant({
-        variables: {
-          input: {
-            productId: ReactionProduct.selectedProductId(),
-            optionId: variant._id,
-            retailers: retailerIds
-          }
-        }
-      });
     });
   };
 
@@ -228,7 +221,7 @@ class CustomVariantForm extends VariantForm {
                     key={retailer.retailerId}
                     name={retailer.retailerId}
                     label={retailer.name}
-                    checked={this.state.retailers !== undefined && this.state.retailers[retailer.retailerId] === true}
+                    checked={this.variant.retailers && this.variant.retailers.includes(retailer.retailerId)}
                     onChange={this.handleToggleRetailer}
                   />
                 ))}
