@@ -2,10 +2,20 @@ import React from "react";
 import { getRawComponent, replaceComponent, Components } from "@reactioncommerce/reaction-components";
 import classnames from "classnames";
 import { findCurrency } from "/client/api";
+import { withRetailers } from "../hocs";
 
 const VariantForm = getRawComponent("VariantForm");
 
 class CustomVariantForm extends VariantForm {
+  handleToggleRetailer = (retailerId, value) => {
+    this.setState({
+      retailers: {
+        ...this.state.retailers,
+        [retailerId]: value
+      }
+    });
+  };
+
   renderOptionFields() {
     const cardName = `variant-${this.variant._id}`;
 
@@ -193,7 +203,15 @@ class CustomVariantForm extends VariantForm {
               <div className="col-sm-12">
                 <label><span>Available at retailers</span></label>
 
-
+                {this.props.retailers && this.props.retailers.map((retailer) => (
+                  <Components.Switch
+                    key={retailer.retailerId}
+                    name={`retailer-${retailer.retailerId}`}
+                    label={retailer.name}
+                    checked={this.state.retailers !== undefined && this.state.retailers[retailer.retailerId] === true}
+                    onChange={(event, value) => this.handleToggleRetailer(retailer.retailerId, value)}
+                  />
+                ))}
               </div>
             </div>
           </Components.CardBody>
@@ -203,6 +221,6 @@ class CustomVariantForm extends VariantForm {
   }
 }
 
-replaceComponent("VariantForm", CustomVariantForm);
+replaceComponent("VariantForm", withRetailers(CustomVariantForm));
 
-export default CustomVariantForm;
+export default withRetailers(CustomVariantForm);
