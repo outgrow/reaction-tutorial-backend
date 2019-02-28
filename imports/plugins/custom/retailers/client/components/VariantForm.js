@@ -7,7 +7,7 @@ import { withRetailers } from "../hocs";
 const VariantForm = getRawComponent("VariantForm");
 
 class CustomVariantForm extends VariantForm {
-  handleToggleRetailer = (retailerId, value) => {
+  handleToggleRetailer = (event, value, retailerId) => {
     this.setState({
       retailers: {
         ...this.state.retailers,
@@ -206,10 +206,10 @@ class CustomVariantForm extends VariantForm {
                 {this.props.retailers && this.props.retailers.map((retailer) => (
                   <Components.Switch
                     key={retailer.retailerId}
-                    name={`retailer-${retailer.retailerId}`}
+                    name={retailer.retailerId}
                     label={retailer.name}
                     checked={this.state.retailers !== undefined && this.state.retailers[retailer.retailerId] === true}
-                    onChange={(event, value) => this.handleToggleRetailer(retailer.retailerId, value)}
+                    onChange={this.handleToggleRetailer}
                   />
                 ))}
               </div>
