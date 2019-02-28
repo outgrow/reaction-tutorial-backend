@@ -6,15 +6,13 @@
  * @return {Promise<Object>} MongoDB update object
  */
 export default function updateRetailersForVariant(input, context) {
-  const catalogCollection = context.collections.Catalog;
+  const productCollection = context.collections.Products;
 
-  return catalogCollection.updateOne({
-    "product._id": input.productId
+  return productCollection.updateOne({
+    _id: input.optionId
   }, {
     $set: {
-      "product.variants.$[].options.$[option].retailers": input.retailers
+      retailers: input.retailers
     }
-  }, {
-    arrayFilters: [{ "option._id": input.optionId }]
   });
 }
