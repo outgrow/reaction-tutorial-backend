@@ -9,7 +9,7 @@ export default function updateRetailersForVariant(input, context) {
   const catalogCollection = context.collections.Catalog;
 
   return catalogCollection.updateOne({
-    _id: input.productId
+    "product._id": input.productId
   }, {
     $set: {
       "product.variants.$[].options.$[option].retailers": input.retailers

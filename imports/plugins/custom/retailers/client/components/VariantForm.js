@@ -2,7 +2,8 @@ import React from "react";
 import { getRawComponent, replaceComponent, Components } from "@reactioncommerce/reaction-components";
 import classnames from "classnames";
 import { findCurrency } from "/client/api";
-import { withRetailers } from "../hocs";
+import { ReactionProduct } from "/lib/api";
+import { withRetailers, withUpdateRetailersForVariant } from "../hocs";
 
 const VariantForm = getRawComponent("VariantForm");
 
@@ -13,6 +14,25 @@ class CustomVariantForm extends VariantForm {
         ...this.state.retailers,
         [retailerId]: value
       }
+    }, () => {
+      const { retailers, variant } = this.state;
+      const retailerIds = [];
+
+      for (let retailerId in retailers) {
+        if (retailers.hasOwnProperty(retailerId) && retailers[retailerId] === true) {
+          retailerIds.push(retailerId);
+        }
+      }
+
+      this.props.updateRetailersForVariant({
+        variables: {
+          input: {
+            productId: ReactionProduct.selectedProductId(),
+            optionId: variant._id,
+            retailers: retailerIds
+          }
+        }
+      });
     });
   };
 
@@ -221,6 +241,6 @@ class CustomVariantForm extends VariantForm {
   }
 }
 
-replaceComponent("VariantForm", withRetailers(CustomVariantForm));
+replaceComponent("VariantForm", withUpdateRetailersForVariant(withRetailers(CustomVariantForm)));
 
-export default withRetailers(CustomVariantForm);
+export default withUpdateRetailersForVariant(withRetailers(CustomVariantForm));
