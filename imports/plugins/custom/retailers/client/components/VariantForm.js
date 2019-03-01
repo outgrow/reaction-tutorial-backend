@@ -12,7 +12,9 @@ class CustomVariantForm extends VariantForm {
     const { variant } = this.state;
     let retailerIds = variant.retailers;
 
-    if (value === true && retailerIds.includes(retailerId) === false) {
+    if (value === true && retailerIds === undefined) {
+      retailerIds = [retailerId];
+    } else if (value === true && retailerIds.includes(retailerId) === false) {
       retailerIds.push(retailerId);
     } else if (value === false && retailerIds.includes(retailerId) === true) {
       retailerIds = retailerIds.filter((id) => id !== retailerId);

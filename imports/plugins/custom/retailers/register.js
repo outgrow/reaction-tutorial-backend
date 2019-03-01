@@ -11,7 +11,7 @@ Reaction.registerPackage({
   name: "retailers",
   autoEnable: true,
   catalog: {
-    customPublishedProductVariantFields: ["retailers"]
+    publishedProductVariantFields: ["retailers"]
   },
   functionsByType: {
     publishProductToCatalog: [publishProductToCatalog],
