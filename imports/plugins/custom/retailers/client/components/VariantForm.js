@@ -3,7 +3,7 @@ import { getRawComponent, replaceComponent, Components } from "@reactioncommerce
 import classnames from "classnames";
 import { findCurrency } from "/client/api";
 import { ReactionProduct } from "/lib/api";
-import { withRetailers, withUpdateRetailersForVariant } from "../hocs";
+import { withRetailers } from "../hocs";
 
 const VariantForm = getRawComponent("VariantForm");
 
@@ -20,15 +20,7 @@ class CustomVariantForm extends VariantForm {
       retailerIds = retailerIds.filter((id) => id !== retailerId);
     }
 
-    this.props.updateRetailersForVariant({
-      variables: {
-        input: {
-          productId: ReactionProduct.selectedProductId(),
-          optionId: variant._id,
-          retailers: retailerIds
-        }
-      }
-    });
+    this.handleFieldBlur({}, retailerIds, "retailers");
   };
 
   renderOptionFields() {
@@ -236,6 +228,6 @@ class CustomVariantForm extends VariantForm {
   }
 }
 
-replaceComponent("VariantForm", withUpdateRetailersForVariant(withRetailers(CustomVariantForm)));
+replaceComponent("VariantForm", withRetailers(CustomVariantForm));
 
-export default withUpdateRetailersForVariant(withRetailers(CustomVariantForm));
+export default withRetailers(CustomVariantForm);

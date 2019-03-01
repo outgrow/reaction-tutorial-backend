@@ -76,34 +76,6 @@ input UpdateRetailerInput {
   isEnabled: Boolean
 }
 
-input UpdateRetailersForVariantInput {
-  "An optional string identifying the mutation call, which will be returned in the response payload"
-  clientMutationId: String
-
-  "Product ID"
-  productId: String!
-
-  "Option ID"
-  optionId: String!
-
-  "List of retailer IDs to assign"
-  retailers: [String]!
-}
-
-type UpdateRetailersForVariantPayload {
-  "An optional string identifying the mutation call, which will be returned in the response payload"
-  clientMutationId: String
-
-  "Product ID"
-  productId: String!
-
-  "Option ID"
-  optionId: String!
-
-  "List of retailer IDs to assign"
-  retailers: [String]!
-}
-
 extend type Mutation {
   "Adds a new retailer"
   addRetailer(input: AddRetailerInput): UpdateRetailersPayload!
@@ -113,7 +85,4 @@ extend type Mutation {
 
   "Updates a retailer"
   updateRetailer(input: UpdateRetailerInput): UpdateRetailersPayload!
-
-  "Assigns retailers to a variant"
-  updateRetailersForVariant(input: UpdateRetailersForVariantInput): UpdateRetailersForVariantPayload!
 }
