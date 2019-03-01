@@ -72,8 +72,6 @@ class RetailerDashboardContainer extends Component {
       }
     });
 
-    console.log("updated retailer list", updatedRetailerList);
-
     this.setState({ retailers: updatedRetailerList.data.updateRetailer.retailers });
   };
 

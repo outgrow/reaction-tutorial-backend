@@ -1,5 +1,3 @@
-import Logger from "@reactioncommerce/logger";
-
 /**
  * @name "Mutation.addRetailer"
  * @method
