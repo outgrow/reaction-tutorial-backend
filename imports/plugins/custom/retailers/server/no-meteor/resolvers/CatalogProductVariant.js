@@ -8,16 +8,20 @@ export default {
       return [];
     }
 
-    return context.collections.Retailers.find({
-        _id: {
-          $in: retailerIds
-        },
-        isEnabled: true
-      })
-      .map((retailer) => ({
-        ...retailer,
-        retailerId: retailer._id.toHexString()
-      }))
-      .toArray();
+    const retailerList = context.collections.Retailers.find({
+      _id: {
+        $in: retailerIds
+      },
+      isEnabled: true
+    }).toArray();
+
+    if (retailerList === undefined || retailerList.length === 0) {
+      return [];
+    }
+
+    return retailerList.map((retailer) => ({
+      ...retailer,
+      retailerId: retailer._id.toHexString()
+    }));
   }
 }
