@@ -1,14 +1,14 @@
 import { ObjectID } from "mongodb";
 
 export default {
-  retailers(productVariant, args, context) {
+  async retailers(productVariant, args, context) {
     const retailerIds = productVariant.retailers.map((retailer) => ObjectID.createFromHexString(retailer));
 
     if (retailerIds === undefined || retailerIds.length === 0) {
       return [];
     }
 
-    const retailerList = context.collections.Retailers.find({
+    const retailerList = await context.collections.Retailers.find({
       _id: {
         $in: retailerIds
       },
