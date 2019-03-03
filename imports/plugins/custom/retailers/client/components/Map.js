@@ -1,5 +1,5 @@
 import React from "react";
-import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps"
+import { withGoogleMap, GoogleMap } from "react-google-maps"
 
 const Map = ({ children, onMapMounted }) => (
   <GoogleMap
@@ -11,4 +11,4 @@ const Map = ({ children, onMapMounted }) => (
   </GoogleMap>
 );
 
-export default withScriptjs(withGoogleMap(Map));
+export default withGoogleMap(Map);
