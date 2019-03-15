@@ -1,0 +1,7 @@
+extend type Query {
+  filterTags(shopId: ID!): FilterTags
+}
+
+type FilterTags {
+  filterTags: [Tag]
+}
