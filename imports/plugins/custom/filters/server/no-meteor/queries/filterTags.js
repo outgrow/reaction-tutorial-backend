@@ -1,5 +1,3 @@
-import Logger from "@reactioncommerce/logger";
-
 /**
  * @method filterTags
  * @summary Returns all retailers
@@ -7,19 +5,13 @@ import Logger from "@reactioncommerce/logger";
  * @param {String} shopId - the ID of shop to filter tags by
  * @return {Array} the list of retailers as an array
  */
-export default async function(context, shopId) {
+export default function(context, shopId) {
   const tagCollection = context.collections.Tags;
 
-  Logger.info("tagCollection", tagCollection);
-
-  const filterTags = await tagCollection
+  return tagCollection
     .find({
       shopId,
       type: "filter"
     })
     .toArray();
-
-  Logger.info("filterTags", filterTags);
-
-  return filterTags;
 }

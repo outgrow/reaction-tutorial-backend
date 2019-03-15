@@ -1,4 +1,3 @@
-import Logger from "@reactioncommerce/logger";
 import { decodeShopOpaqueId } from "@reactioncommerce/reaction-graphql-xforms/shop";
 
 /**
@@ -15,10 +14,15 @@ import { decodeShopOpaqueId } from "@reactioncommerce/reaction-graphql-xforms/sh
 export default async function retailers(parentResult, args, context) {
   const dbShopId = decodeShopOpaqueId(args.shopId);
 
-  Logger.info("opaque shopId", args.shopId);
-  Logger.info("shopId", dbShopId);
+  const tags = await context.queries.filterTags(context, dbShopId);
 
-  const filterTags = await context.queries.filterTags(context, dbShopId);
+  const topLevelTags = tags.filter((tag) => tag.isTopLevel);
+  const subTags = tags.filter((tag) => !tag.isTopLevel && tag.relatedTagIds);
+
+  const filterTags = topLevelTags.map((topLevelTag) => ({
+    tag: topLevelTag,
+    subTags: subTags.filter(({ relatedTagIds }) => relatedTagIds.includes(topLevelTag._id))
+  }));
 
   return {
     filterTags

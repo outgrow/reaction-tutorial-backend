@@ -1,7 +1,19 @@
 extend type Query {
+  "Returns tags of type filter for a given shop"
   filterTags(shopId: ID!): FilterTags
 }
 
+"A stripped-down version of a tag"
+type FilterTag {
+  "The original top-level tag"
+  tag: Tag
+
+  "An array of its sub tags"
+  subTags: [Tag]
+}
+
+"The response for the filterTags query"
 type FilterTags {
-  filterTags: [Tag]
+  "The array of tags"
+  filterTags: [FilterTag]
 }

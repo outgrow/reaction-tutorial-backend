@@ -109,7 +109,7 @@ async function populateSizes(context) {
       slug: "sizes",
       type: "filter",
       isDeleted: false,
-      isTopLevel: false,
+      isTopLevel: true,
       isVisible: true,
       createdAt: now,
       updatedAt: now
