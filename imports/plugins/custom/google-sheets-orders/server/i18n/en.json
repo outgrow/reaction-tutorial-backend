@@ -1,0 +1,13 @@
+[{
+  "i18n": "en",
+  "ns": "google-sheets-orders",
+  "translation": {
+    "google-sheets-orders": {
+      "admin": {
+        "settings": {
+          "googleSheetConnector": "Google Sheets"
+        }
+      }
+    }
+  }
+}]
