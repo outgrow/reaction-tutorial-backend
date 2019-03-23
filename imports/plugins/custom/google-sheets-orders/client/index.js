@@ -11,5 +11,5 @@ registerOperatorRoute({
   path: "/google-sheets",
   // eslint-disable-next-line react/display-name
   SidebarIconComponent: (props) => <FontAwesomeIcon icon={faTable} {...props} />,
-  sidebarI18nLabel: "admin.googleSheetSettings.googleSheetConnector"
+  sidebarI18nLabel: "admin.settings.googleSheetConnector"
 });
