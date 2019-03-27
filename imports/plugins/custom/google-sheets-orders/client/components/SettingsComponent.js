@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Form } from "reacto-form";
+import { withApollo } from "react-apollo";
 import Button from "@reactioncommerce/components/Button/v1";
 import ErrorsBlock from "@reactioncommerce/components/ErrorsBlock/v1";
 import Field from "@reactioncommerce/components/Field/v1";
 import TextInput from "@reactioncommerce/components/TextInput/v1";
 import { Card, CardHeader, CardBody, CardGroup, ListItem } from "/imports/plugins/core/ui/client/components";
+import { googleAuthenticationUrl } from "../queries";
 
 class SettingsComponent extends Component {
   handleFormValidate = async (fields) => {
@@ -34,11 +36,19 @@ class SettingsComponent extends Component {
     return errors;
   };
 
+  handleRedirectToGoogle = async () => {
+    const { client } = this.props;
+
+    const authenticationUrl = await client.query({ query: googleAuthenticationUrl });
+
+    console.log("URL:", authenticationUrl);
+  };
+
   render() {
     return (
       <div>
         <Card>
-          <CardHeader title="Google Sheets Connector" />
+          <CardHeader title="Settings" />
           <CardBody padded>
             <Form
               ref={(formRef) => { this.form = formRef; }}
@@ -65,9 +75,16 @@ class SettingsComponent extends Component {
             </Form>
           </CardBody>
         </Card>
+
+        <Card>
+          <CardHeader title="Login" />
+          <CardBody padded>
+            <Button onClick={this.handleRedirectToGoogle}>Log In with Google</Button>
+          </CardBody>
+        </Card>
       </div>
     );
   }
 }
 
-export default SettingsComponent;
+export default withApollo(SettingsComponent);

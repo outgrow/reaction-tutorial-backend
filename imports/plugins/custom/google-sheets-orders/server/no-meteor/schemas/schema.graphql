@@ -1,0 +1,10 @@
+extend type Query {
+  "Generates and returns a Google authentication URL"
+  googleAuthenticationUrl: GoogleAuthenticationUrlPayload
+}
+
+"Response for the `googleAuthenticationUrl` query"
+type GoogleAuthenticationUrlPayload {
+  "The authentication URL"
+  url: String!
+}
