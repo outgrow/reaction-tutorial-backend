@@ -39,9 +39,9 @@ class SettingsComponent extends Component {
   handleRedirectToGoogle = async () => {
     const { client } = this.props;
 
-    const authenticationUrl = await client.query({ query: googleAuthenticationUrl });
+    const { data } = await client.query({ query: googleAuthenticationUrl });
 
-    console.log("URL:", authenticationUrl);
+    window.open(data.googleAuthenticationUrl.url)
   };
 
   render() {
