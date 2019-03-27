@@ -6,7 +6,8 @@ Reaction.registerPackage({
   icon: "fa fa-table",
   autoEnable: true,
   settings: {
-    apiKey: "",
+    clientId: "",
+    clientSecret: "",
     token: "",
     sheetId: ""
   }

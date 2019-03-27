@@ -10,17 +10,17 @@ class SettingsComponent extends Component {
   handleFormValidate = async (fields) => {
     const errors = [];
 
-    if (!fields.apiKey || fields.apiKey.length === 0) {
+    if (!fields.clientId || fields.clientId.length === 0) {
       errors.push({
-        message: "A Google API Key is required.",
-        name: "apiKey"
+        message: "A Google OAuth client ID is required.",
+        name: "clientId"
       });
     }
 
-    if (!fields.token || fields.token.length === 0) {
+    if (!fields.clientSecret || fields.clientSecret.length === 0) {
       errors.push({
-        message: "An authentication token is required.",
-        name: "token"
+        message: "A Google OAuth client secret is required.",
+        name: "clientSecret"
       });
     }
 
@@ -46,14 +46,14 @@ class SettingsComponent extends Component {
               validator={this.handleFormValidate}
               value={this.props.settings}
             >
-              <Field name="apiKey" label="API Key" labelFor="apiKey-input">
-                <TextInput id="apiKey-input" name="apiKey" />
-                <ErrorsBlock names={["apiKey"]} />
+              <Field name="clientId" label="Client ID" labelFor="clientId-input">
+                <TextInput id="clientId-input" name="clientId" />
+                <ErrorsBlock names={["clientId"]} />
               </Field>
 
-              <Field name="token" label="Authentication Token" labelFor="token-input">
-                <TextInput id="token-input" name="token" />
-                <ErrorsBlock names={["token"]} />
+              <Field name="clientSecret" label="Client Secret" labelFor="clientSecret-input">
+                <TextInput id="clientSecret-input" name="clientSecret" />
+                <ErrorsBlock names={["clientSecret"]} />
               </Field>
 
               <Field name="sheetId" label="Sheet ID" labelFor="sheetId-input">
