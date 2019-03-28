@@ -2,6 +2,7 @@ import Reaction from "/imports/plugins/core/core/server/Reaction";
 import schemas from "./server/no-meteor/schemas";
 import queries from "./server/no-meteor/queries";
 import resolvers from "./server/no-meteor/resolvers";
+import mutations from "./server/no-meteor/mutations";
 
 Reaction.registerPackage({
   label: "Google Sheets Order Export",
@@ -18,5 +19,6 @@ Reaction.registerPackage({
     schemas,
     resolvers
   },
-  queries
+  queries,
+  mutations
 });

@@ -1,12 +1,22 @@
 import React, { Component } from "react";
 import i18next from "i18next";
 import { Meteor } from "meteor/meteor";
+import queryString from "query-string";
+import { withRouter } from "react-router";
 import { composeWithTracker } from "@reactioncommerce/reaction-components";
 import { Reaction } from "/client/modules/core/";
 import Logger from "/client/modules/logger";
 import SettingsComponent from "../components/SettingsComponent";
 
 class Settings extends Component {
+  constructor(props) {
+    super(props);
+
+    const params = queryString.parse(props.history.location.search);
+
+    console.log("params", params);
+  }
+
   handleSubmit = (settings) => new Promise((resolve, reject) => {
     Meteor.call("package/update", "google-sheets-orders", "settings", settings, (err, res) => {
       if (err) {
@@ -40,4 +50,7 @@ function composer(props, onData) {
   }
 }
 
-export default composeWithTracker(composer)(Settings);
+export default composeWithTracker(
+  composer,
+  withRouter
+)(Settings);

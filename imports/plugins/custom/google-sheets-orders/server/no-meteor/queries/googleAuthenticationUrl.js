@@ -17,7 +17,7 @@ export default async function googleAuthenticationUrl(context, params) {
   const { Packages } = collections;
 
   const packageInfo = await Packages.findOne({ name: "google-sheets-orders" });
-  const redirectUrl = `${Reaction.absoluteUrl()}webhooks/google-sheets/authorize`;
+  const redirectUrl = `${Reaction.absoluteUrl()}operator/google-sheets`;
 
   const client = new google.auth.OAuth2(packageInfo.settings.clientId, packageInfo.settings.clientSecret, redirectUrl);
 
