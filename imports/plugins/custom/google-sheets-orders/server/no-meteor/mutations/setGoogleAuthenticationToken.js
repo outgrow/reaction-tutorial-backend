@@ -11,7 +11,9 @@ export default async function setGoogleAuthenticationToken({ token }, context) {
 
   const packageInfo = await Packages.findOne({ name: "google-sheets-orders" });
 
-  await Packages.updateOne(packageInfo._id, {
+  await Packages.updateOne({
+    _id: packageInfo._id
+  }, {
     $set: {
       "settings.token": token
     }

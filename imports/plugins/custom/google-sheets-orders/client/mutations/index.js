@@ -1,5 +1,1 @@
-import setGoogleAuthenticationToken from "./setGoogleAuthenticationToken";
-
-export default {
-  setGoogleAuthenticationToken
-};
+export { default as setGoogleAuthenticationToken } from "./setGoogleAuthenticationToken";

@@ -2,21 +2,31 @@ import React, { Component } from "react";
 import i18next from "i18next";
 import { Meteor } from "meteor/meteor";
 import queryString from "query-string";
-import { withApollo } from "react-apollo";
+import { compose, withApollo } from "react-apollo";
 import { withRouter } from "react-router";
-import { composeWithTracker } from "@reactioncommerce/reaction-components";
 import { Reaction } from "/client/modules/core/";
 import Logger from "/client/modules/logger";
 import SettingsComponent from "../components/SettingsComponent";
 import { googleAuthenticationUrl } from "../queries";
+import { setGoogleAuthenticationToken } from "../mutations";
 
 class Settings extends Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    const params = queryString.parse(this.props.history.location.search);
 
-    const params = queryString.parse(props.history.location.search);
+    const { code: token } = params;
+    const { client } = this.props;
 
-    console.log("params", params);
+    if (token !== undefined && token.length > 0) {
+      client.mutate({
+        mutation: setGoogleAuthenticationToken,
+        variables: {
+          input: {
+            token
+          }
+        }
+      });
+    }
   }
 
   handleSubmit = (settings) => new Promise((resolve, reject) => {
@@ -42,28 +52,19 @@ class Settings extends Component {
 
 
   render() {
+    const { settings } = Reaction.getPackageSettings("google-sheets-orders");
+
     return (
       <SettingsComponent
         onSubmit={this.handleSubmit}
         onRedirectToGoogle={this.handleRedirectToGoogle}
-        settings={this.props.settings}
+        settings={settings}
       />
     );
   }
 }
 
-function composer(props, onData) {
-  if (Reaction.Subscriptions.Packages.ready()) {
-    const packageInfo = Reaction.getPackageSettings("google-sheets-orders");
-
-    onData(null, {
-      settings: packageInfo.settings
-    });
-  }
-}
-
-export default composeWithTracker(
-  composer,
+export default compose(
   withApollo,
   withRouter
 )(Settings);
