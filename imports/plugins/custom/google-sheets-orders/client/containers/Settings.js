@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import i18next from "i18next";
 import { Meteor } from "meteor/meteor";
 import queryString from "query-string";
+import { withApollo } from "react-apollo";
 import { withRouter } from "react-router";
 import { composeWithTracker } from "@reactioncommerce/reaction-components";
 import { Reaction } from "/client/modules/core/";
 import Logger from "/client/modules/logger";
 import SettingsComponent from "../components/SettingsComponent";
+import { googleAuthenticationUrl } from "../queries";
 
 class Settings extends Component {
   constructor(props) {
@@ -30,10 +32,20 @@ class Settings extends Component {
     });
   });
 
+  handleRedirectToGoogle = async () => {
+    const { client } = this.props;
+
+    const { data } = await client.query({ query: googleAuthenticationUrl });
+
+    window.open(data.googleAuthenticationUrl.url)
+  };
+
+
   render() {
     return (
       <SettingsComponent
         onSubmit={this.handleSubmit}
+        onRedirectToGoogle={this.handleRedirectToGoogle}
         settings={this.props.settings}
       />
     );
@@ -52,5 +64,6 @@ function composer(props, onData) {
 
 export default composeWithTracker(
   composer,
+  withApollo,
   withRouter
 )(Settings);
