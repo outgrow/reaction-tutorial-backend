@@ -10,19 +10,19 @@ type GoogleAuthenticationUrlPayload {
 }
 
 extend type Mutation {
-  "Saves a new Google authentication token"
-  setGoogleAuthenticationToken(input: SetGoogleAuthenticationTokenInput): SetGoogleAuthenticationTokenPayload!
+  "Saves a new Google authentication code"
+  setGoogleAuthenticationCode(input: SetGoogleAuthenticationCodeInput): SetGoogleAuthenticationCodePayload!
 }
 
-input SetGoogleAuthenticationTokenInput {
+input SetGoogleAuthenticationCodeInput {
   "An optional string identifying the mutation call, which will be returned in the response payload"
   clientMutationId: String
 
-  "The new Google authentication token"
-  token: String!
+  "The new Google authentication code"
+  code: String!
 }
 
-type SetGoogleAuthenticationTokenPayload {
+type SetGoogleAuthenticationCodePayload {
   "The new Google authentication token"
   token: String!
 }

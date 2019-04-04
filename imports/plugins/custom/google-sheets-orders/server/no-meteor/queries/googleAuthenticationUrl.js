@@ -1,7 +1,11 @@
 import { google } from "googleapis";
 import Reaction from "/imports/plugins/core/core/server/Reaction";
 
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+const SCOPES = [
+  "email",
+  "profile",
+  "https://www.googleapis.com/auth/spreadsheets"
+];
 
 /**
  * @name googleAuthenticationUrl

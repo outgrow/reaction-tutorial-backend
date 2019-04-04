@@ -8,21 +8,21 @@ import { Reaction } from "/client/modules/core/";
 import Logger from "/client/modules/logger";
 import SettingsComponent from "../components/SettingsComponent";
 import { googleAuthenticationUrl } from "../queries";
-import { setGoogleAuthenticationToken } from "../mutations";
+import { setGoogleAuthenticationCode } from "../mutations";
 
 class Settings extends Component {
   componentDidMount() {
     const params = queryString.parse(this.props.history.location.search);
 
-    const { code: token } = params;
+    const { code } = params;
     const { client } = this.props;
 
-    if (token !== undefined && token.length > 0) {
+    if (code !== undefined && code.length > 0) {
       client.mutate({
-        mutation: setGoogleAuthenticationToken,
+        mutation: setGoogleAuthenticationCode,
         variables: {
           input: {
-            token
+            code
           }
         }
       });
@@ -49,7 +49,6 @@ class Settings extends Component {
 
     window.open(data.googleAuthenticationUrl.url)
   };
-
 
   render() {
     const { settings } = Reaction.getPackageSettings("google-sheets-orders");

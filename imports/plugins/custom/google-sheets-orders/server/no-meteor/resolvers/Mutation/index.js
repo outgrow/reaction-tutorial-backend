@@ -1,5 +1,5 @@
-import setGoogleAuthenticationToken from "./setGoogleAuthenticationToken";
+import setGoogleAuthenticationCode from "./setGoogleAuthenticationCode";
 
 export default {
-  setGoogleAuthenticationToken
+  setGoogleAuthenticationCode
 };

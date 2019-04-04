@@ -1,1 +1,1 @@
-export { default as setGoogleAuthenticationToken } from "./setGoogleAuthenticationToken";
+export { default as setGoogleAuthenticationCode } from "./setGoogleAuthenticationCode";
