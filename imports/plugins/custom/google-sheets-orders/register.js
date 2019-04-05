@@ -1,8 +1,4 @@
 import Reaction from "/imports/plugins/core/core/server/Reaction";
-import schemas from "./server/no-meteor/schemas";
-import queries from "./server/no-meteor/queries";
-import resolvers from "./server/no-meteor/resolvers";
-import mutations from "./server/no-meteor/mutations";
 import startup from "./server/no-meteor/startup";
 
 Reaction.registerPackage({
@@ -11,18 +7,18 @@ Reaction.registerPackage({
   icon: "fa fa-table",
   autoEnable: true,
   settings: {
+    projectId: "",
+    privateKeyId: "",
+    privateKey: "",
+    clientEmail: "",
     clientId: "",
-    clientSecret: "",
-    sheetId: "",
-    refreshToken: ""
-  },
-  graphQL: {
-    schemas,
-    resolvers
+    authUri: "",
+    tokenUri: "",
+    authProviderX509CertUrl: "",
+    clientX509CertUrl: "",
+    sheetId: ""
   },
   functionsByType: {
     startup: [startup]
-  },
-  queries,
-  mutations
+  }
 });

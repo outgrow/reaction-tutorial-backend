@@ -1,7 +1,6 @@
 import Logger from "@reactioncommerce/logger";
 import { google } from "googleapis";
 import appEvents from "/imports/node-app/core/util/appEvents";
-import Reaction from "/imports/plugins/core/core/server/Reaction";
 
 export default function startup(context) {
   appEvents.on("afterOrderCreate", async ({ order }) => {
@@ -9,12 +8,20 @@ export default function startup(context) {
 
     const { settings } = await context.collections.Packages.findOne({ name: "google-sheets-orders" });
 
-    const redirectUrl = `${Reaction.absoluteUrl()}operator/google-sheets`;
-
-    const client = new google.auth.OAuth2(settings.clientId, settings.clientSecret, redirectUrl);
-
-    client.setCredentials({
-      refresh_token: settings.refreshToken
+    const client = await google.auth.getClient({
+      credentials: {
+        type: "service_account",
+        project_id: settings.projectId,
+        private_key_id: settings.privateKeyId,
+        private_key: settings.privateKey,
+        client_email: settings.clientEmail,
+        client_id: settings.clientId,
+        auth_uri: settings.authUri,
+        token_uri: settings.tokenUri,
+        auth_provider_x509_cert_url: settings.authProviderX509CertUrl,
+        client_x509_cert_url: settings.clientX509CertUrl
+      },
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
 
     const sheets = google.sheets({
