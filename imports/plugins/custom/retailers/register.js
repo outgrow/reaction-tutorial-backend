@@ -5,6 +5,7 @@ import queries from "./server/no-meteor/queries";
 import mutations from "./server/no-meteor/mutations";
 import resolvers from "./server/no-meteor/resolvers";
 import publishProductToCatalog from "./server/no-meteor/publishProductToCatalog";
+import getFulfillmentMethodsWithQuotes from "./server/no-meteor/getFulfillmentMethodsWithQuotes";
 
 Reaction.registerPackage({
   label: "Product Retailers",
@@ -14,6 +15,7 @@ Reaction.registerPackage({
     publishedProductVariantFields: ["retailers"]
   },
   functionsByType: {
+    getFulfillmentMethodsWithQuotes: [getFulfillmentMethodsWithQuotes],
     publishProductToCatalog: [publishProductToCatalog],
     startup: [startup]
   },
