@@ -7,15 +7,7 @@ Reaction.registerPackage({
   icon: "fa fa-table",
   autoEnable: true,
   settings: {
-    projectId: "",
-    privateKeyId: "",
-    privateKey: "",
-    clientEmail: "",
-    clientId: "",
-    authUri: "",
-    tokenUri: "",
-    authProviderX509CertUrl: "",
-    clientX509CertUrl: "",
+    googleCredentialObject: "",
     sheetId: ""
   },
   functionsByType: {

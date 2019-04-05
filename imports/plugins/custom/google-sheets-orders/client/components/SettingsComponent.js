@@ -88,49 +88,9 @@ class SettingsComponent extends Component {
               validator={this.handleFormValidate}
               value={this.props.settings}
             >
-              <Field name="projectId" label="Project ID" labelFor="projectId-input">
-                <TextInput id="projectId-input" name="projectId" />
-                <ErrorsBlock names={["projectId"]} />
-              </Field>
-
-              <Field name="privateKeyId" label="Private Key ID" labelFor="privateKeyId-input">
-                <TextInput id="privateKeyId-input" name="privateKeyId" />
-                <ErrorsBlock names={["privateKeyId"]} />
-              </Field>
-
-              <Field name="privateKey" label="Private Key" labelFor="privateKey-input">
-                <TextInput id="privateKey-input" name="privateKey" />
-                <ErrorsBlock names={["privateKey"]} />
-              </Field>
-
-              <Field name="clientEmail" label="Client E-Mail" labelFor="clientEmail-input">
-                <TextInput id="clientEmail-input" name="clientEmail" />
-                <ErrorsBlock names={["clientEmail"]} />
-              </Field>
-
-              <Field name="clientId" label="Client ID" labelFor="clientId-input">
-                <TextInput id="clientId-input" name="clientId" />
-                <ErrorsBlock names={["clientId"]} />
-              </Field>
-
-              <Field name="authUri" label="Authentication URI" labelFor="authUri-input">
-                <TextInput id="authUri-input" name="authUri" />
-                <ErrorsBlock names={["authUri"]} />
-              </Field>
-
-              <Field name="tokenUri" label="Token URI" labelFor="tokenUri-input">
-                <TextInput id="tokenUri-input" name="tokenUri" />
-                <ErrorsBlock names={["tokenUri"]} />
-              </Field>
-
-              <Field name="authProviderX509CertUrl" label="Authentication Provider x509 Certificate URL" labelFor="authProviderX509CertUrl-input">
-                <TextInput id="authProviderX509CertUrl-input" name="authProviderX509CertUrl" />
-                <ErrorsBlock names={["authProviderX509CertUrl"]} />
-              </Field>
-
-              <Field name="clientX509CertUrl" label="Client x509 Certificate URL" labelFor="clientX509CertUrl-input">
-                <TextInput id="clientX509CertUrl-input" name="clientX509CertUrl" />
-                <ErrorsBlock names={["clientX509CertUrl"]} />
+              <Field name="googleCredentialObject" label="Google Credential JSON" labelFor="googleCredentialObject-input">
+                <TextInput id="googleCredentialObject-input" name="googleCredentialObject" shouldAllowLineBreaks />
+                <ErrorsBlock names={["googleCredentialObject"]} />
               </Field>
 
               <Field name="sheetId" label="Sheet ID" labelFor="sheetId-input">

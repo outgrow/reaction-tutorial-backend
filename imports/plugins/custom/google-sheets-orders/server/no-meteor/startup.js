@@ -9,18 +9,7 @@ export default function startup(context) {
     const { settings } = await context.collections.Packages.findOne({ name: "google-sheets-orders" });
 
     const client = await google.auth.getClient({
-      credentials: {
-        type: "service_account",
-        project_id: settings.projectId,
-        private_key_id: settings.privateKeyId,
-        private_key: settings.privateKey,
-        client_email: settings.clientEmail,
-        client_id: settings.clientId,
-        auth_uri: settings.authUri,
-        token_uri: settings.tokenUri,
-        auth_provider_x509_cert_url: settings.authProviderX509CertUrl,
-        client_x509_cert_url: settings.clientX509CertUrl
-      },
+      credentials: JSON.parse(settings.googleCredentialObject),
       scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
 
