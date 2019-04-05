@@ -19,13 +19,15 @@ export default async function setGoogleAuthenticationCode({ code }, context) {
 
   const { tokens } = await client.getToken(code);
 
-  await Packages.updateOne({
-    _id: packageInfo._id
-  }, {
-    $set: {
-      "settings.token": tokens.access_token
-    }
-  });
+  if (tokens.refresh_token !== undefined) {
+    await Packages.updateOne({
+      _id: packageInfo._id
+    }, {
+      $set: {
+        "settings.refreshToken": tokens.refresh_token
+      }
+    });
+  }
 
   client.setCredentials(tokens);
 
@@ -38,5 +40,5 @@ export default async function setGoogleAuthenticationCode({ code }, context) {
 
   console.log(googleUser);
 
-  return tokens.access_token;
+  return tokens.refresh_token || "";
 }

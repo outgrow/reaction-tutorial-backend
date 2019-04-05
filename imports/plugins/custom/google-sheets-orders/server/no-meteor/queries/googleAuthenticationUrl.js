@@ -26,7 +26,7 @@ export default async function googleAuthenticationUrl(context, params) {
   const client = new google.auth.OAuth2(packageInfo.settings.clientId, packageInfo.settings.clientSecret, redirectUrl);
 
   const url = client.generateAuthUrl({
-    access_type: "online",
+    access_type: "offline",
     scope: SCOPES,
   });
 
