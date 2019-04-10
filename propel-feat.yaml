@@ -1,8 +1,8 @@
 services:
-- name: reaction-core
-  root_domain: staging.reactioncommerce.com
-  dns_name: reaction-core
-  desired_task_count: 2
+- name: backend
+  root_domain: backend.reaction-tutorial-staging.outgrow.io
+  dns_name: backend
+  desired_task_count: 1
   min_task_count: 0
   max_task_count: 2
   min_healthy_percent: 100
@@ -11,7 +11,7 @@ services:
   alb_listener_path: /
   alb_health_check_path: /health
   task-definition:
-    name: staging-core
+    name: reaction
     containers:
     - name: core
       cpu: 500
@@ -31,8 +31,8 @@ services:
       - name: HYDRA_OAUTH2_INTROSPECT_URL
       - name: SKIP_FIXTURES
       - name: CERTIFICATE_ARN
-- name: storefront-core
-  root_domain: staging.reactioncommerce.com
+- name: storefront
+  root_domain: reaction-tutorial-staging.outgrow.io
   dns_name: storefront
   desired_task_count: 1
   min_task_count: 0
@@ -43,7 +43,7 @@ services:
   alb_listener_path: /
   alb_health_check_path: /health
   task-definition:
-    name: staging-storefront-core
+    name: storefront
     containers:
     - name: nginx
       cpu: 128

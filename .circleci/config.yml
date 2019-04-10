@@ -5,9 +5,7 @@ version: 2
 # typing. See http://yaml.org/type/merge.html for details.
 defaults: &defaults
   environment:
-    - DOCKER_REPOSITORY: "reactioncommerce/reaction"
-    - DOCKER_NAMESPACE: "reactioncommerce"
-    - DOCKER_NAME: "reaction"
+    - DOCKER_REPOSITORY: "295610271698.dkr.ecr.us-east-1.amazonaws.com/reaction-storefront"
     - GLOBAL_CACHE_VERSION: "v2"
     - TOOL_NODE_FLAGS: "--max-old-space-size=4096"
   working_directory: ~/reaction-app

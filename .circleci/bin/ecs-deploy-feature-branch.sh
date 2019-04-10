@@ -4,11 +4,11 @@ sudo apt-get -y install python3-pip wget
 sudo pip3 install awscli
 
 export ENVIRONMENT=staging
-export CLUSTER=core
+export CLUSTER=staging
 # remove spaces from branch name
 export SERVICE_FEATURE=`echo $CIRCLE_BRANCH | sed 's/ //g'`
-export SERVICE1=reaction-core
-export CONTAINER1=core
+export SERVICE1=backend
+export CONTAINER1=reaction-backend
 export core_CIRCLE_SHA1=$CIRCLE_SHA1
 
 PROPEL_CONFIG_FILE="propel-feat.yaml"
@@ -18,7 +18,7 @@ if [ ! -f ${PROPEL_CONFIG_FILE} ]; then
 fi
 
 if [ -z "${AWS_REGION}" ]; then
-        export AWS_REGION=us-west-2
+        export AWS_REGION=us-east-1
 fi
 
 ENV_NAME_UPPERCASE=$(echo $ENVIRONMENT | awk '{print toupper($0)}')
