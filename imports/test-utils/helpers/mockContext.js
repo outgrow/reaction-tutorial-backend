@@ -12,7 +12,6 @@ const mockContext = {
   getFunctionsOfType: jest.fn().mockName("getFunctionsOfType").mockReturnValue([]),
   mutations: {},
   queries: {},
-  shopId: "FAKE_SHOP_ID",
   userHasPermission: jest.fn().mockName("userHasPermission"),
   userId: "FAKE_USER_ID"
 };
@@ -63,7 +62,6 @@ export function mockCollection(collectionName) {
   "Catalog",
   "Emails",
   "Groups",
-  "Inventory",
   "MediaRecords",
   "NavigationItems",
   "NavigationTrees",
@@ -76,6 +74,7 @@ export function mockCollection(collectionName) {
   "SellerShops",
   "Shipping",
   "Shops",
+  "SimpleInventory",
   "Tags",
   "Templates",
   "Themes",
