@@ -30,6 +30,7 @@ const product = Factory.Product.makeOne({
 const variant = Factory.Product.makeOne({
   _id: internalVariantId,
   ancestors: [internalProductId],
+  attributeLabel: "Variant",
   isDeleted: false,
   isVisible: true,
   shopId: internalShopId,
@@ -39,6 +40,7 @@ const variant = Factory.Product.makeOne({
 const option1 = Factory.Product.makeOne({
   _id: internalOptionId1,
   ancestors: [internalProductId, internalVariantId],
+  attributeLabel: "Option",
   isDeleted: false,
   isVisible: true,
   shopId: internalShopId,
@@ -48,6 +50,7 @@ const option1 = Factory.Product.makeOne({
 const option2 = Factory.Product.makeOne({
   _id: internalOptionId2,
   ancestors: [internalProductId, internalVariantId],
+  attributeLabel: "Option",
   isDeleted: false,
   isVisible: true,
   shopId: internalShopId,
@@ -77,8 +80,6 @@ beforeAll(async () => {
   await testApp.start();
 
   await testApp.insertPrimaryShop({ _id: internalShopId, name: shopName });
-
-  await testApp.runServiceStartup();
 
   await testApp.collections.Products.insertOne(product);
   await testApp.collections.Products.insertOne(variant);
