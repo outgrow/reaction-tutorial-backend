@@ -67,7 +67,7 @@
     "deep-equal": "^1.0.1",
     "dnd-core": "^2.5.4",
     "escape-string-regexp": "^1.0.5",
-    "express": "4.16.2",
+    "express": "4.17.3",
     "faker": "^4.1.0",
     "fibers": "^2.0.0",
     "flatten-obj": "^3.1.1",
